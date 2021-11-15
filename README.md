@@ -19,12 +19,19 @@ requests and past history for all employees in the company. Finance managers are
 
 
 ## Possible servelets endpoints:
-- /api/signup POST
-- /api/login POST
-- /api/check-session GET
-- /api/logout GET
-- /api/role GET
-- /api/users GET
+- @PostMapping("user")                    -> createUser
+- @GetMapping("user")                     -> getAllUser
+- @GetMapping("user/{id}")                -> getUserById
+- @GetMapping("user/{username}")          -> getUserByUsername
+- @GetMapping("user/{email}")             -> getUserByEmail
+- @PatchMapping("user")                   -> editUser
+- @GetMapping("check-session")            -> checkSession
+- @PostMapping("login")                   -> login
+- @GetMapping("logout")                   -> logout
+- @PatchMapping("reset-password")         -> resetPassword
+- @GetMapping("forgot-password/{email}")  -> forgotPassword
+
+
 - /api/reimbursement
    - POST - addNewReimbursement
    - PATCH - editAReimbursement
@@ -39,16 +46,7 @@ requests and past history for all employees in the company. Finance managers are
     GET - getListOfAllPendingReimbursements  
 
 ## Features
-### TODOs Have Done:
-- Created the DB schema via DBeaver
-- Created models
-- Created Dao interface and DaoImplementations
-- Created Services that calls the Dao execution methods
-- Created the Dispatcher class which will handle the restful endpoints from the client.
-- Created the Controller classes that handles the HttpRequest and HttpResponse from the Dispatcher
-- Built the front-end modules stuff like the html, css and javascript files.
-- Built some front-end javascript functions that will handle the inputs from the user
-- Able to complete the major requirements of the project
+
 - Added Mockito with JUnit testing 
 - Added optional functionalities for email
 - Added optional password hashing
