@@ -44,16 +44,25 @@ requests and past history for all employees in the company. Finance managers are
 - /api/manager
     GET - getListOfAllPendingReimbursements  
 
-## Features
+## Features Added (BACK-END)
 
+### Basic Fetures
+- Register as a new user
+- Login as an existing user
+- Edit Firstname and Lastname
+- Forgot password then reset automatically through password generator
+- Reset the password
+- Checked for current login session
+- Able to logout from the current session
+- 
+
+### Additional Features
 - Added Mockito with JUnit testing 
-- Added optional functionalities for email
-- Added optional password hashing
-- Create a password generator
-- Get the User full name and display in the client side
-- Applied Responsive website design
+- Added functionalities for email service
+- Added password hashing using BCrypt
+- Created password generator
 
-### TODOs to be done
+## TODOs to be done
 - Upload attachment via S3
 
 ## Application Snippet
