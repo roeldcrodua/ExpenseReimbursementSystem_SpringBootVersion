@@ -28,7 +28,6 @@ requests and past history for all employees in the company. Finance managers are
 - @GetMapping("check-session")            -> checkSession
 - @PostMapping("login")                   -> login
 - @GetMapping("logout")                   -> logout
-- @PatchMapping("reset-password")         -> resetPassword
 - @GetMapping("forgot-password/{email}")  -> forgotPassword
 
 
