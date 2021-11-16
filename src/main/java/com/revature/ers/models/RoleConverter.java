@@ -21,6 +21,7 @@ public class RoleConverter implements AttributeConverter<UserRole, Integer> {
         }
         return UserRole.valueOf(Stream.of(UserRole.values())
                 .filter(ur -> ur.getRoleId() == roleId)
+                .findFirst().orElse(null)
                 .toString());
     }
 }

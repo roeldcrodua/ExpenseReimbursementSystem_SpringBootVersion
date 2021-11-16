@@ -79,7 +79,19 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
-
+		<!-- tag::spring-security-crypto -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-crypto</artifactId>
+			<version>5.5.2</version>
+		</dependency>
+		<!-- tag::spring-mailer -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+			<version>2.5.4</version>
+		</dependency>
+		<!-- end::spring-mailer -->
 	</dependencies>
 
 	<build>
