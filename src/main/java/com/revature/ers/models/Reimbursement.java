@@ -1,6 +1,7 @@
 package com.revature.ers.models;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Entity
 @Table(name="reimbursement")
 public class Reimbursement {
@@ -33,15 +35,15 @@ public class Reimbursement {
     @Column(name="receipt")
     private String receipt;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private User author;
+    @Column(name="author", nullable = false)
+    private Integer author;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private User resolver;
+    @Column(name="resolver")
+    private Integer resolver;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Column(name="status", nullable = false)
     private ReimbStatus status;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Column(name="type", nullable = false)
     private ReimbType type;
 }

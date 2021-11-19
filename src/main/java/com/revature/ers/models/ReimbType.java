@@ -2,21 +2,19 @@ package com.revature.ers.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
-@Data
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name="reimb_type")
-public class ReimbType {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="type_id")
-    private int statusId;
+public enum ReimbType {
+    LODGING(0),
+    TRAVEL(1),
+    FOOD(2),
+    OTHER(3);
 
-    @Column(name="type_value")
-    private String statusValue;
+    private int typeId;
 }

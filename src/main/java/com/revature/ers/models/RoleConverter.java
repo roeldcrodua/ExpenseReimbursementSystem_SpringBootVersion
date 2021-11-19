@@ -1,5 +1,7 @@
 package com.revature.ers.models;
 
+import com.revature.ers.models.UserRole;
+
 import javax.persistence.AttributeConverter;
 import javax.persistence.Converter;
 import java.util.stream.Stream;
