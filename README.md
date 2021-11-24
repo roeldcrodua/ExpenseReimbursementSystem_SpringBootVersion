@@ -19,6 +19,7 @@ requests and past history for all employees in the company. Finance managers are
 
 
 ## Possible servelets endpoints:
+### USERS
 - @PostMapping("user")                    -> createUser
 - @GetMapping("user")                     -> getAllUser
 - @GetMapping("user/{id}")                -> getUserById
@@ -30,19 +31,16 @@ requests and past history for all employees in the company. Finance managers are
 - @GetMapping("logout")                   -> logout
 - @GetMapping("forgot-password/{email}")  -> forgotPassword
 
-
-- /api/reimbursement
-   - POST - addNewReimbursement
-   - PATCH - editAReimbursement
-   - DELETE - deleteAReimbursement
-   - GET - getOneReimbursement
-- /api/reimbursements
-   - GET - getAllOwnReimbursement
-- /api/resolve
-    - PUT - resolveAReimbursement
-    - GET - getAllListOfResolvedReimbursement
-- /api/manager
-    GET - getListOfAllPendingReimbursements  
+### REIMBURSEMENT
+- @GetMapping("reimbursement")            -> getAllReimbursement
+- @PostMapping("reimbursement")           -> createReimbursement
+- @PatchMapping("reimbursement")          -> editReimbursement
+- @DeleteMapping("reimbursement/{reimId}") -> deleteReimbursement
+- @GetMapping("reimbursement/{reimbId}")  -> getReimbursementById
+- @GetMapping("reimbursement/userId/{userId}") -> getAllOwnReimbursement
+- @GetMapping("reimbursement/status/{statusId}") -> getAllReimbursementByStatus
+- @GetMapping("reimbursement/type/{type}") -> getAllReimbursementByType
+- @GetMapping("reimbursement/resolved")   -> getAllReimbursementByResolver
 
 ## Features Added (BACK-END)
 
