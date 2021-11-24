@@ -1,11 +1,6 @@
 package com.revature.ers.models;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
+import lombok.*;
 
 @Getter
 @AllArgsConstructor
@@ -17,4 +12,5 @@ public enum ReimbType {
     OTHER(3);
 
     private int typeId;
+
 }
