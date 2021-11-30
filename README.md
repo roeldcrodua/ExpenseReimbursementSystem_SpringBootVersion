@@ -1,5 +1,5 @@
 # Expense Reimbursement System - SpringBootVersion
-Refactoring of Project 1 using hibernate and servlet into SpringBoot
+Refactoring of Project 1 using hibernate and servlet into SpringBoot and Angular Framework
 
 ## Project Summary
 The Expense Reimbursement System (ERS) will manage the process of reimbursing employees for expenses incurred while on company time. All employees in the
