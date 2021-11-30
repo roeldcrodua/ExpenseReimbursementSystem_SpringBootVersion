@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-login',
@@ -7,9 +9,76 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-  constructor() { }
+  _username: string = "";
+  _password: string = "";
+  _userId: number = 0;
+  _invalidUsernameMessage: string = "";
+  _invalidPasswordMessage: string = "";
+  _isFound: boolean = false;
+
+  constructor(private userService: UserService, private router:Router) { }
 
   ngOnInit(): void {
+    this.userService.checkSession().subscribe(data => {
+      console.log(data)
+      if (data.success){
+        this.router.navigate([`/dashboard`]);
+      }
+    })
   }
 
+  userLogin(){
+    this.userService.userLogin(this._username, this._password).subscribe(data => {
+      console.log(data)
+      if (data.success){
+        this._userId = data.object.userId;
+        this.router.navigate([`/dashboard/`]);
+      } else {
+        this._invalidPasswordMessage = "Invalid password";
+      }
+    })
+  }
+
+  removeUsername(){
+    this._invalidUsernameMessage = "";
+    this._username = "";
+  }
+
+  removePassword(){
+    this._invalidPasswordMessage = "";
+    this._password = "";
+  }
+
+  checkPassword(){
+    if (this._password == ""){
+      this._invalidPasswordMessage = "Password is empty";
+    }
+  }
+
+  checkUsername(){
+    this._isFound = false;
+    this._invalidUsernameMessage = "";
+    if (this._username.match("\@")){
+      this.userService.getUserByEmail(this._username).subscribe(data => {
+        if (data.object.email == this._username){
+          this._isFound = true;
+          this._invalidUsernameMessage = "";
+        }
+      })
+    } else if (this._username != ""){
+      this.userService.getUserByUsername(this._username).subscribe(data => {
+        if (data.object.userName == this._username){
+          this._isFound = true;
+          this._invalidUsernameMessage = "";
+        }
+
+      })
+    }
+
+    if (this._username == ""){
+      this._invalidUsernameMessage = "Username is EMPTY!";
+    } else if (!this._isFound) {
+      this._invalidUsernameMessage = "Username not found!";
+    }
+  }
 }
