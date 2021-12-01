@@ -22,9 +22,9 @@ requests and past history for all employees in the company. Finance managers are
 ### USERS
 - @PostMapping("user")                    -> createUser
 - @GetMapping("user")                     -> getAllUser
-- @GetMapping("user/{id}")                -> getUserById
-- @GetMapping("user/{username}")          -> getUserByUsername
-- @GetMapping("user/{email}")             -> getUserByEmail
+- @GetMapping("user/id/{id}")                -> getUserById
+- @GetMapping("user/username/{username}")          -> getUserByUsername
+- @GetMapping("user/email/{email}")             -> getUserByEmail
 - @PatchMapping("user")                   -> editUser
 - @GetMapping("check-session")            -> checkSession
 - @PostMapping("login")                   -> login
