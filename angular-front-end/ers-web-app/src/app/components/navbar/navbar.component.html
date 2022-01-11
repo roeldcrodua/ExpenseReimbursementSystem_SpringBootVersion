@@ -1,1 +1,27 @@
-<p>navbar works!</p>
+<div class="text-center navbar-dark bg-light p-2 w-auto">
+  <a class="text-decoration-none h1 fw-bolder" id="title" href="#">Expense Reimbursement System</a>
+</div>
+<div class=" mt-5 mb-5 w-100 d-inline-flex justify-content-center" id="account-profile">
+  <div class="d-inline-flex" id="account-detail">
+      <div class="account-details p-2 m-2">
+          <h3 class="fw-bolder">Account Profile</h3>
+          <div>
+              <div>
+                  <button class="btn-outline-warning" id="reset-password-btn">Reset Password</button>
+              </div>
+              <div>
+                <button class="btn-outline-primary" id="edit-btn">Update Profile</button>
+            </div>
+              <div>
+                  <button class="btn-outline-danger" id="logout-btn">Logout</button>
+              </div>
+          </div>
+      </div>
+      <div id="profile-image" class="ms-4">
+          <img width="200" height="200" src="https://picsum.photos/200">
+      </div>
+  </div>
+  <div class="ms-3" id="account-information-container">
+    <div><app-user-profile></app-user-profile></div>
+  </div>
+</div>

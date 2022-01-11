@@ -1,0 +1,83 @@
+/* The popup form - hidden by default */
+
+
+  #title{
+    color: rgb(29, 29, 238);
+    text-shadow: 2px 2px #9cec06;
+  }
+
+  h2, h3, h4{
+    text-shadow: 2px 2px #c2f85c;
+  }
+
+  .account-profile{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
+.infoText{
+  display: flex;
+  justify-content: space-between;
+}
+
+#edit-btn, #logout-btn, #reset-password-btn{
+  width: 150px;
+  margin: 10px;
+  border-radius: 15px;
+  font-weight: bold;
+  height: 30px;
+}
+
+
+/* =========================
+   Mobile Styles: 0 to 480px
+   =========================
+*/
+
+@media only screen and (max-width: 480px) {
+
+  #account-profile{
+    display: -ms-flexbox !important;
+    display: inline-block !important;
+  }
+
+  #reimbursement-table{
+    width: auto;
+  }
+
+  }
+
+  /* ================================
+     Tablet Styles: 481px and greater
+     ================================
+  */
+  @media only screen and (min-width: 481px) {
+
+    #account-detail{
+      display: -ms-flexbox !important;
+      display: inline-block !important;
+    }
+
+  }
+
+
+  /* =================================
+     Desktop Styles: 769px and greater
+     =================================
+  */
+  @media only screen and (min-width: 769px) {
+
+    #account-detail{
+      display: -ms-inline-flexbox !important;
+      display: inline-flex !important;
+    }
+
+
+    #reimbursement-table{
+      width:80%;
+      margin-left:10%;
+      margin-right:10%;
+    }
+  }

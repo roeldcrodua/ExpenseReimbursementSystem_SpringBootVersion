@@ -17,6 +17,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { ReimbursementListComponent } from './components/reimbursement/reimbursement-list/reimbursement-list.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { HttpClientModule } from '@angular/common/http';
     ResolveReimbursementComponent,
     DeleteReimbursementComponent,
     DashboardComponent,
-    NavbarComponent
+    NavbarComponent,
+    ReimbursementListComponent
   ],
   imports: [
     BrowserModule,
