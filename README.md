@@ -59,6 +59,7 @@ requests and past history for all employees in the company. Finance managers are
 - Added functionalities for email service
 - Added password hashing using BCrypt
 - Created password generator
+- Added logging features using Log4j
 
 ## TODOs to be done
 - Upload attachment via S3
