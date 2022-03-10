@@ -18,6 +18,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { ReimbursementListComponent } from './components/reimbursement/reimbursement-list/reimbursement-list.component';
+import { OrderbyPipe } from './pipe/orderby.pipe';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { ReimbursementListComponent } from './components/reimbursement/reimburse
     DeleteReimbursementComponent,
     DashboardComponent,
     NavbarComponent,
-    ReimbursementListComponent
+    ReimbursementListComponent,
+    OrderbyPipe
   ],
   imports: [
     BrowserModule,
