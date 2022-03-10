@@ -2,7 +2,7 @@
   <table id="reimbursement-table" class="table text-start table-hover table-responsive table-responsive-sm">
     <thead>
         <tr class="table-info ">
-            <th scope="col">ID</th>
+            <th class="ps-5 text-start" Assoscope="col">ID</th>
             <th class="ps-5 text-start" scope="col">Type</th>
             <th class="ps-5 text-start" scope="col">Description</th>
             <th class="ps-5 text-start" scope="col">Status</th>
@@ -12,7 +12,24 @@
             <th class="ps-5 text-center" scope="col">Action</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody *ngFor="let item of _reimbursements | orderby: 'DESC': 'DateSubmitted'">
+        <tr>
+            <td class="ps-5 text-start" scope="col">{{item.reimbId}}</td>
+            <td class="ps-5 text-start" scope="col">{{item.type}}</td>
+            <td class="ps-5 text-start" scope="col">{{item.description}}</td>
+            <td class="ps-5 text-start" scope="col">{{item.status}}</td>
+            <td class="ps-5 text-start" scope="col">{{item.amount}}</td>
+            <td class="ps-5 text-start" scope="col">{{item.dateSubmitted}}</td>
+            <td class="ps-5 text-start" scope="col">{{item.dateResolved}}</td>
+            <td class="ps-5 text-center" scope="col">
+                <div>
+                    <button class="btn-success" id="view-btn">View</button>
+                    <button class="btn-info" id="edit-btn">Edit</button>
+                    <button class="btn-danger small" id="delete-btn">Delete</button>
+                    <button class="btn-warning small" id="resolved-btn">Resolve</button>
+                </div>
+            </td>
+        </tr>
     </tbody>
 </table>
 </div>
