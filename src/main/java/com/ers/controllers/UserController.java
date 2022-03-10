@@ -1,23 +1,18 @@
-package com.revature.ers.controllers;
+package com.ers.controllers;
 
-import com.revature.ers.models.Response;
-import com.revature.ers.models.User;
-import com.revature.ers.services.EmailService;
-import com.revature.ers.services.ReimbursementService;
-import com.revature.ers.services.UserService;
+import com.ers.models.Response;
+import com.ers.models.User;
+import com.ers.services.EmailService;
+import com.ers.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 @RestController("userController")
-@RequestMapping(value="ers/api")
-@CrossOrigin(value=CrossOriginUtil.CROSS_ORIGIN_VALUE, allowCredentials = "true")
+@RequestMapping(value="api")
 public class UserController {
-    private static final Logger logger = Logger.getLogger(UserController.class.toString());
     private UserService userService;
     public EmailService emailService = new EmailService();
 
@@ -28,7 +23,6 @@ public class UserController {
 
     @GetMapping("user")
     public Response getAllUser(){
-        logger.log(Level.INFO, "Listing All Users\n {0)", this.userService.getAllUsers());
         return new Response(true, "Listing all users", this.userService.getAllUsers());
     }
 
@@ -50,7 +44,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("user/username/{username}")
+    @GetMapping("user/{username}")
     public Response getUserByUsername(@PathVariable String username){
         User user = this.userService.getUserByUsername(username);
 
@@ -61,7 +55,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("user/email/{email}")
+    @GetMapping("user/{email}")
     public Response getUserByEmail(HttpSession session, @PathVariable String email) {
         User currentUser = this.userService.getUserByEmail(email);
 

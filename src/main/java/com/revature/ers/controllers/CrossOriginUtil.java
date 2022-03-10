@@ -1,4 +1,6 @@
 package com.revature.ers.controllers;
 
-public class CorsOriginUtil {
+public class CrossOriginUtil {
+    static final String CROSS_ORIGIN_VALUE =
+            "http://localhost:4200";
 }

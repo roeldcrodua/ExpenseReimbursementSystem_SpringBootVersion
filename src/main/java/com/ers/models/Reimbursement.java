@@ -1,6 +1,5 @@
-package com.revature.ers.models;
+package com.ers.models;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,11 +24,9 @@ public class Reimbursement {
     private int amount;
 
     @Column(name="date_submitted", nullable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy")
     private Date dateSubmitted;
 
     @Column(name="date_resolved")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy")
     private Date dateResolved;
 
     @Column(name="description", nullable = false)
