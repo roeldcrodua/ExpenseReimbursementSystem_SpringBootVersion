@@ -18,11 +18,13 @@ export class LoginComponent implements OnInit {
 
   constructor(private userService: UserService, private router:Router) { }
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
     this.userService.checkSession().subscribe(data => {
       console.log(data)
       if (data.success){
         this.router.navigate([`/dashboard`]);
+      } else {
+        this.router.navigate([`/login/`]);
       }
     })
   }

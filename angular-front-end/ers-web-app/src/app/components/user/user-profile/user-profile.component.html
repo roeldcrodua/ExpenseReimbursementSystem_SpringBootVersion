@@ -1,26 +1,38 @@
-<div class="ms-5" id="account-information-container">
-  <div class="infoText mb-2">
-    <label class="text-capitalize text-black fw-bolder">First Name</label>
-    <input type="text" class="disabled ms-5" value="" disabled>
+<div class=" mt-3 mb-5 w-100 d-inline-flex justify-content-center" id="account-profile">
+  <div class="" id="account-detail">
+      <div class="account-details text-center ">
+          <h3 class="fw-bolder">Account Profile</h3>
+      </div>
+      <div id="profile-image" >
+          <img width="200" height="200" src="https://picsum.photos/200">
+      </div>
   </div>
-  <div class="infoText mb-2">
-    <label class="text-capitalize text-black fw-bolder">Last Name</label>
-    <input type="text" class="disabled ms-5" value="" disabled>
+
+  <div class="ms-5" id="account-information-container">
+    <div class="infoText mb-2">
+      <label class="text-capitalize text-black fw-bolder">Id Number</label>
+      <input type="text" class="disabled ms-5" [value]="_user.userId" disabled>
+    </div>
+    <div class="infoText mb-2">
+      <label class="text-capitalize text-black fw-bolder">Username</label>
+      <input type="text" class="disabled ms-5" [value]="_user.username" disabled>
+    </div>
+    <div class="infoText mb-2">
+      <label class="text-capitalize text-black fw-bolder">First Name</label>
+      <input type="text" class="disabled ms-5" [value]="_user.firstName" disabled>
+    </div>
+    <div class="infoText mb-2">
+      <label class="text-capitalize text-black fw-bolder">Last Name</label>
+      <input type="text" class="disabled ms-5" [value]="_user.lastName" disabled>
+    </div>
+    <div class="infoText mb-2">
+      <label class="text-capitalize text-black fw-bolder">Email</label>
+      <input type="text" class="disabled ms-5" [value]="_user.email" disabled>
+    </div>
+    <div class="infoText mb-2">
+      <label class="text-capitalize text-black fw-bolder">Role</label>
+      <input type="text" class="disabled ms-5" [value]="_user.role" disabled>
+    </div>
   </div>
-  <div class="infoText mb-2">
-    <label class="text-capitalize text-black fw-bolder">Username</label>
-    <input type="text" class="disabled ms-5" value="" disabled>
-  </div>
-  <div class="infoText mb-2">
-    <label class="text-capitalize text-black fw-bolder">Email</label>
-    <input type="text" class="disabled ms-5" value="" disabled>
-  </div>
-  <div class="infoText mb-2">
-    <label class="text-capitalize text-black fw-bolder">Id Number</label>
-    <input type="text" class="disabled ms-5" value="" disabled>
-  </div>
-  <div class="infoText mb-2">
-    <label class="text-capitalize text-black fw-bolder">Role</label>
-    <input type="text" class="disabled ms-5" value="" disabled>
-  </div>
+
 </div>

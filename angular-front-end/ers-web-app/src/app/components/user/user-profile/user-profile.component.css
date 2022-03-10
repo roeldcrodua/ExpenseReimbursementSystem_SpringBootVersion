@@ -2,3 +2,54 @@
   display: flex;
   justify-content: space-between;
 }
+
+/* .account-profile{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+} */
+
+/* =========================
+   Mobile Styles: 0 to 480px
+   =========================
+*/
+
+@media only screen and (max-width: 480px) {
+
+  #account-profile{
+    display: -ms-flexbox !important;
+    display: inline-block !important;
+  }
+
+  #reimbursement-table{
+    width: auto;
+  }
+
+  }
+
+  /* ================================
+     Tablet Styles: 481px and greater
+     ================================
+  */
+  @media only screen and (min-width: 481px) {
+
+
+  }
+
+
+  /* =================================
+     Desktop Styles: 769px and greater
+     =================================
+  */
+  @media only screen and (min-width: 769px) {
+
+
+
+
+    #reimbursement-table{
+      width:80%;
+      margin-left:10%;
+      margin-right:10%;
+    }
+  }
