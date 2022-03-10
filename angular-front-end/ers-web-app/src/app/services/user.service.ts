@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GenericService } from './generic.service';
+import { Observable } from 'rxjs';
+import { User } from '../model/user';
 
 @Injectable({
   providedIn: 'root'
@@ -11,25 +13,12 @@ export class UserService {
 
    }
 
-  createUser(username:string, password:string, firstName:string, lastName: string, email:string, birthday:any, profilePic?:string){
-    return this.httpClient.post<any>(this.genericService._localServerDomain + "/user", {
-      username: username,
-      password: password,
-      firstName: firstName,
-      lastName: lastName,
-      email: email,
-      birthday: birthday,
-      profilePic: profilePic
-    }, {withCredentials: true});
+  createUser(newUser: User) : Observable<any>{
+    return this.httpClient.post<any>(this.genericService._localServerDomain + "/user", newUser, {withCredentials: true});
   }
 
-  editProfile(firstName: string, lastName: string, birthday: any, aboutMe: string, profilePic?: any){
-    return this.httpClient.patch<any>(this.genericService._localServerDomain  + "/user",{
-      firstName: firstName,
-      lastName: lastName,
-      birthday: birthday,
-      profilePic: profilePic
-    }, {withCredentials: true});
+  editProfile(existingUser: User): Observable<any>{
+    return this.httpClient.patch<any>(this.genericService._localServerDomain  + "/user",existingUser, {withCredentials: true});
   }
 
   deleteUser(userInput: string){
