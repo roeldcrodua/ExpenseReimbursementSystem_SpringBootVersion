@@ -1,5 +1,3 @@
-<div class="profile">
-  <div><app-navbar></app-navbar></div>
-
-</div>
-<app-reimbursement-list></app-reimbursement-list>
+<app-navbar [_loggedInUser] = "_user"></app-navbar>
+<app-user-profile [_loggedInUser] = "_user"></app-user-profile>
+<app-reimbursement-list [_specifiedUser] = "_user"></app-reimbursement-list>
