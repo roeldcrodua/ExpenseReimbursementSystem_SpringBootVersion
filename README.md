@@ -44,7 +44,7 @@ requests and past history for all employees in the company. Finance managers are
 
 ## Features Added (BACK-END)
 
-### Basic Fetures
+### Basic Features
 - Register as a new user
 - Login as an existing user
 - Edit Firstname and Lastname
@@ -63,6 +63,25 @@ requests and past history for all employees in the company. Finance managers are
 
 ## TODOs to be done
 - Upload attachment via S3
+- Use JWT for session
+
+
+
+## Features Added (FRONT-END)
+
+### Basic Features
+- Created Login UI
+- Able to create and display the main dashboard UI after login
+- Populate the table containing the owned reimbursement for employee
+- Populate the account information details of the employee 
+-
+
+### Additional Features
+- Make it a single-page application composes of multiple components
+
+## TODOs to be done
+- Auto-repopulate the table without reloading or refrsh the page
+- Add the JWT functionality
 
 ## Application Snippet
 ### Login Form Page
