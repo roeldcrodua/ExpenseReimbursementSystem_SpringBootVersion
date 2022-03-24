@@ -21,6 +21,8 @@ export class NavbarComponent implements OnInit {
   };
   _role: any;
 
+  _isNewReimbursement = true;
+
   @Input()
   _loggedInUser:  User = {
     username: "",
@@ -52,5 +54,6 @@ export class NavbarComponent implements OnInit {
       }
     })  
   }
+
 
 }

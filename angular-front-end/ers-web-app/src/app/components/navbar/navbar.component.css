@@ -15,11 +15,16 @@
 
 
 #home-btn, #edit-btn, #logout-btn, #reset-password-btn, #register-btn{
-  width: 150px;
+  width: 145px;
   margin: 10px;
-  border-radius: 15px;
+  margin-left: 15px;
+  border-radius: 5px;
   font-weight: bold;
-  height: 30px;
+  height: 35px;
 }
 
+.border-left{
+  border-left-color: darkblue 3px;
+  border-left-style: solid;
+}
 
