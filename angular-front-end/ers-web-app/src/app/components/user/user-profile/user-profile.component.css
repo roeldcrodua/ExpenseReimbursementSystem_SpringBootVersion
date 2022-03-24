@@ -3,6 +3,10 @@
   justify-content: space-between;
 }
 
+h2, h3, h4{
+  text-shadow: 2px 2px #c2f85c;
+}
+
 /* .account-profile{
   display: flex;
   flex-direction: row;

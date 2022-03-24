@@ -38,6 +38,11 @@ export class UserService {
     return this.httpClient.get<any>(this.genericService._localServerDomain  + `/user/username/${username}`, {withCredentials: true});
   }
 
+  getUserById(id: any) {
+
+    return this.httpClient.get<any>(this.genericService._localServerDomain  + `/user/${id}`, {withCredentials: true});
+  }
+
   checkSession(){
     return this.httpClient.get<any>(this.genericService._localServerDomain  + "/check-session", {withCredentials: true});
   }
