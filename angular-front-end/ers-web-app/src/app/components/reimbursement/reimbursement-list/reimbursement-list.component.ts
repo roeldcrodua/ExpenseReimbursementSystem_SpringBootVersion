@@ -1,10 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { Router, UrlSerializer } from '@angular/router';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { NavigationEnd, Router, UrlSerializer } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { Reimbursement } from 'src/app/model/reimbursement';
 import { User } from 'src/app/model/user';
 import { ReimbursementService } from 'src/app/services/reimbursement.service';
 import { UserService } from 'src/app/services/user.service';
-import { OrderbyPipe } from 'src/app/pipe/orderby.pipe'
 
 @Component({
   selector: 'app-reimbursement-list',
@@ -12,7 +12,7 @@ import { OrderbyPipe } from 'src/app/pipe/orderby.pipe'
   styleUrls: ['./reimbursement-list.component.css'],
   
 })
-export class ReimbursementListComponent implements OnInit {
+export class ReimbursementListComponent implements OnInit, OnChanges {
   // USER
   _user: User = {
     username: "",
@@ -23,7 +23,7 @@ export class ReimbursementListComponent implements OnInit {
     userId: 0,
     role: ""
   };
-  // REIMBURSEMENT
+  // REIMBURSEMENT  
   _reimbursements: Reimbursement[] = [];
   _reimbursement: Reimbursement = {
     reimbId: 0,
@@ -49,7 +49,15 @@ export class ReimbursementListComponent implements OnInit {
     role: ""
   }
 
-  constructor(private userService: UserService, private reimbursementService: ReimbursementService, private router: Router) { }
+  hasChanges: boolean = false;
+  navigationSubscription: any;
+  observer: Subscription = new Subscription;
+  
+  constructor(private userService: UserService, 
+              private reimbursementService: ReimbursementService, 
+              private router: Router) {  
+                this.populateTable();
+                  }
 
   ngOnInit(): void {
     this.userService.checkSession().subscribe(user => {
@@ -77,16 +85,6 @@ export class ReimbursementListComponent implements OnInit {
             role: this._specifiedUser.role
           }
         }
-
-        // Get the reimbursements
-        console.log("USERID")
-        console.log(this._user.userId)
-        this.reimbursementService.getAllOwnReimbursement(this._user.userId).subscribe(reimb => {
-          if (reimb.success){
-            this._reimbursements = reimb.object;
-            console.log(this._reimbursements)
-          }
-        })
       } else {
         this.router.navigate([``]);
       }
@@ -94,7 +92,34 @@ export class ReimbursementListComponent implements OnInit {
   }
 
 
-  reimbursements(): Array<Reimbursement> {
-    return this._reimbursements;
+  viewReimbursement(reimbId: number){
+    this.reimbursementService.getReimbursementById(reimbId).subscribe(reimb => {
+      if (reimb.success){
+        console.log(reimb)
+      }
+    })
+  }
+
+  ngOnChanges(): void {
+    if (this.hasChanges){
+      this.populateTable();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.observer.unsubscribe();
+  }
+
+  ngAfterViewInit(){   
+    this.populateTable(); 
+    this.hasChanges=true;
+  }
+
+  populateTable(){
+    this.observer = this.reimbursementService.getAllOwnReimbursement(this._user.userId).subscribe(reimb => {
+        if (reimb.success){
+          this._reimbursements = reimb.object;  
+        }
+    })
   }
 }

@@ -1,10 +1,14 @@
 <div>
+    <div  class="text-center pb-2">
+        <h2>List of Owned Reimbursement</h2>
+    </div>
+    
   <table id="reimbursement-table" class="table text-start table-hover table-responsive table-responsive-sm">
     <thead>
         <tr class="table-info ">
             <th class="ps-5 text-start" Assoscope="col">ID</th>
             <th class="ps-5 text-start" scope="col">Type</th>
-            <th class="ps-5 text-start" scope="col">Description</th>
+            <th class="ps-5 text-start col-2" scope="col">Description</th>
             <th class="ps-5 text-start" scope="col">Status</th>
             <th class="ps-5 text-start" scope="col">Amount</th>
             <th class="ps-5 text-start" scope="col">Date Submitted</th>
@@ -22,14 +26,12 @@
             <td class="ps-5 text-start" scope="col">{{item.dateSubmitted}}</td>
             <td class="ps-5 text-start" scope="col">{{item.dateResolved}}</td>
             <td class="ps-5 text-center" scope="col">
-                <div>
-                    <button class="btn-success" id="view-btn">View</button>
-                    <button class="btn-info" id="edit-btn">Edit</button>
-                    <button class="btn-danger small" id="delete-btn">Delete</button>
-                    <button class="btn-warning small" id="resolved-btn">Resolve</button>
-                </div>
+            <div>
+                <view-reimbursement-app [_reimbursementInput]="item"></view-reimbursement-app>
+            </div>
             </td>
         </tr>
     </tbody>
 </table>
 </div>
+  

@@ -11,12 +11,3 @@
   }
 
 
-#view-btn, #edit-btn, #resolved-btn, #delete-btn{
-  width: 50px;
-  margin: 2px;
-  border-radius: 15px;
-  font-weight:lighter;
-  height: 30px;
-  font-size: small;
-}
-
