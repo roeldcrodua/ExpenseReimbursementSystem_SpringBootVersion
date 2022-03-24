@@ -7,6 +7,6 @@ export interface Reimbursement {
     receipt: String,
     author: number,
     resolver: number,
-    status: String,
-    type: String
+    status: any,
+    type: any
 }
