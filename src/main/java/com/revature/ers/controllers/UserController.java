@@ -39,7 +39,7 @@ public class UserController {
         return new Response(true, "Adding new user", userFromDb);
     }
 
-    @GetMapping("user/{id}")
+    @GetMapping("user/{userId}")
     public Response getUserById(@PathVariable Integer userId){
         User user = this.userService.getUserById(userId);
 
