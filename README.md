@@ -85,15 +85,18 @@ requests and past history for all employees in the company. Finance managers are
 
 ## Application Snippet
 ### Login Form Page
+![image](https://user-images.githubusercontent.com/65931708/159846540-a37eddaf-e945-41ad-91ca-647deb4b7b74.png)
 
 
 ### Employee Dashboard Page
+![image](https://user-images.githubusercontent.com/65931708/159846603-457585e3-1d1a-4207-a672-b74068e54de1.png)
 
 
 ### Finance Manager Dashboard Page
 
 
 ### Creating/Viewing/Editing/Processing Reimbursement Form
+![image](https://user-images.githubusercontent.com/65931708/159846736-5d59bbdd-e796-4ce7-88d5-34712621d8b9.png)
 
 
 ### Reset Password Page
