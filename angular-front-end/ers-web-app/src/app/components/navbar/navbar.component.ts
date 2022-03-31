@@ -11,27 +11,30 @@ import { UserService } from 'src/app/services/user.service';
 export class NavbarComponent implements OnInit {
 
   _user: User = {
-    username: "",
+    userName: "",
     password: "",
     firstName: "",
     lastName: "",
     email: "",
     userId: 0,
-    role: ""
+    role: "",
+    picUrl: ""
   };
   _role: any;
 
   _isNewReimbursement = true;
+  _isSeachActivated = true;
 
   @Input()
   _loggedInUser:  User = {
-    username: "",
+    userName: "",
     password: "",
     firstName: "",
     lastName: "",
     email: "",
     userId: 0,
-    role: ""
+    role: "",
+    picUrl: ""
   }
 
   
@@ -42,12 +45,13 @@ export class NavbarComponent implements OnInit {
       if (user.success) {
         this._user = {
           userId: user.object.userId,
-          username: user.object.username,
+          userName: user.object.userName,
           password: user.object.password,
           firstName: user.object.firstName,
           lastName: user.object.lastName,
           email: user.object.email,
-          role: user.object.role
+          role: user.object.role,
+          picUrl: user.object.picUrl
         }
       } else {
         this.router.navigate([``]);
@@ -56,4 +60,14 @@ export class NavbarComponent implements OnInit {
   }
 
 
+
+
+  logout(){
+    this.userService.logout().subscribe( data => {
+      if (data.success){
+        console.log("LOGOUT SESSION")
+        this.router.navigate([``]);
+      }
+    })
+  }
 }
