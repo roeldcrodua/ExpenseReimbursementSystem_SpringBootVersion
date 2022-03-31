@@ -80,10 +80,10 @@ public class UserController {
 
         User currentUser = this.userService.editUser(sessionUser, inputUser);
         if (currentUser != null) {
-            if (BCrypt.checkpw(inputUser.getPassword(), sessionUser.getPassword())) {
+            if (inputUser.getPassword().equals(currentUser.getPassword())) {
                 EmailService.sendEmail(currentUser, "update");
                 return new Response(true, "Profile was successfully updated.", currentUser);
-            } else {
+            }else {
                 EmailService.sendEmail(currentUser, "reset");
                 return new Response(true, "Password was successfully updated.", currentUser);
             }
@@ -148,7 +148,7 @@ public class UserController {
     }
 
     @PatchMapping("forgot-password/{email}")
-    public Response forgotPassword(@PathVariable String email) {
+    public Response forgotPassword(HttpSession session, @PathVariable String email) {
         try{
             User oldUser;
 
