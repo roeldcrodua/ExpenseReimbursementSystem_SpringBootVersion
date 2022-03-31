@@ -1,12 +1,15 @@
 <div *ngIf="_isNewReimbursement" class="ms-3 mt-2 mb-2 justify-content-center col">
-    <button type="button" class="btn btn-success tooltip-top fw-bolder " title="File New Reimbursement" id="add-btn" (click)="addNewReimbursement(reimbursement)">Reimbursement</button>
+    <button type="button" class="btn btn-success tooltip-top fw-bold pt-0 pb-0" title="File New Reimbursement" id="add-btn" (click)="addNewReimbursement(reimbursement)">File New<br/>Reimbursement</button>
 </div>
 <div *ngIf="!_isNewReimbursement">
-    <button class="btn-success" id="view-btn" (click)="viewReimbursement(reimbursement)">Open</button>
+    <button *ngIf="!_isManager && _reimbursementInput.status == 'PENDING'" class="btn btn-primary fw-bolder" id="view-btn-open" (click)="viewReimbursement(reimbursement)">Open</button>
+    <button *ngIf="_isManager && _reimbursementInput.status == 'PENDING'"class="btn btn-warning fw-bolder" id="view-btn-resolve" (click)="viewReimbursement(reimbursement)">Resolve</button>
+    <button *ngIf="_reimbursementInput.status == 'APPROVED' " class="btn btn-success fw-bolder" id="view-btn-approved" (click)="viewReimbursement(reimbursement)">Approved</button>
+    <button *ngIf="_reimbursementInput.status == 'DENIED'" class="btn btn-danger fw-bolder" id="view-btn-denied" (click)="viewReimbursement(reimbursement)">Denied</button>
 </div>
 
 <ng-template #reimbursement let-modal>
-    <div class="modal-header">
+    <div class="modal-header bg-info">
         <h3 *ngIf="_isNewReimbursement" class="modal-title" id="modal-basic-title">New Reimbursement Request</h3>
         <h3 *ngIf="!_isNewReimbursement" class="modal-title" id="modal-basic-title">Viewing Reimbursement Details</h3>
         <button type="button" class="btn btn-danger close" aria-label="Close" (click)="modal.dismiss('Cross click')">
@@ -21,11 +24,11 @@
             </div>
             <div class="mb-2">
                 <label for="recipient-name" class="col-form-label fw-bolder">Owner Name</label>
-                <input type="text" disabled class="form-control text-end" id="recipient-name" [value]="_fullName">                 
+                <input type="text" disabled class="form-control text-end" id="recipient-name" [value]="_author">                 
             </div>
             <div *ngIf="!_isNewReimbursement" class="mb-2">
                 <label for="recipient-name" class="col-form-label fw-bolder">Reimbursement Type</label>
-                <input type="text" disabled class="form-control text-end" id="recipient-name" name="_type" [(ngModel)]="_type"> 
+                <input type="text" disabled class="form-control text-end" id="recipient-name" name="_type" [value]="_type"> 
             </div>
             <div *ngIf="_isNewReimbursement">
                 <label for="recipient-name" class="col-form-label fw-bolder">Reimbursement Type</label>
@@ -49,23 +52,31 @@
                 <input *ngIf="!_isNewReimbursement" type="text" disabled class="form-control text-end" id="recipient-name" [value]="_reimbursement.dateSubmitted"> 
                 <input *ngIf="_isNewReimbursement" type="text" disabled class="form-control text-end" id="recipient-name" [value]="_dateSubmitted">                 
             </div>
-            <div class="mb-2">
+            <div *ngIf="!_isManager" class="mb-2">
                 <label for="recipient-name" class="col-form-label fw-bolder">Status</label>
                 <input type="text" disabled class="form-control text-end" id="recipient-name" [value]="_reimbursement.status">                 
             </div>
+            <div *ngIf="_isManager">
+                <label for="recipient-name" class="col-form-label fw-bolder">Status</label>
+                <select id="_type" name="_type" class="bg-light text-black mt-2 text-uppercase fw-bold form-control text-center" required [(ngModel)]="_status">
+                    <option value="0" selected>PENDING</option>
+                    <option value="1">APPROVED</option>
+                    <option value="2">DENIED</option>
+                </select>               
+            </div>
             <div class="mb-2">
                 <label for="recipient-name" class="col-form-label fw-bolder">Date Processed</label>
-                <input type="text" disabled class="form-control text-end" id="recipient-name" [value]="_reimbursement.dateResolved">                 
+                <input type="text" disabled class="form-control text-end" id="recipient-name" [value]="_dateResolved">                 
             </div>
             <div class="mb-2">
                 <label for="recipient-name" class="col-form-label fw-bolder">Processed By</label>
-                <input type="text" disabled class="form-control text-end" id="recipient-name" [value]="_reimbursement.resolver">                 
-            </div>
+                <input  type="text" disabled class="form-control text-end" id="recipient-name" [value]="_resolver">                                 
+        </div>
         </form>
     </div>
     <div class="modal-footer">
             <button type="button" class="btn btn-secondary" aria-label="Close" (click)="modal.dismiss('Cross click')">Cancel</button>
-            <app-confirm [_reimbursementInput]="_reimbursement"  [_type]="_type" [_description]="_description" [_amount]="_amount"></app-confirm>
+            <app-confirm [_reimbursementInput]="_reimbursement"  [_type]="_type" [_description]="_description" [_amount]="_amount" [_isAddingReimbursement]="_isAddingReimbursement" [_isDeletingReimbursment]="_isDeletingReimbursment" [_isEditingReimbursment]="_isEditingReimbursment" [_isManager]="_isManager" [_status]="_status" [_isProcessed]="_isProcessed"></app-confirm>
       </div>
   </ng-template>
 
