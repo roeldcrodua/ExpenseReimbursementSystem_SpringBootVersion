@@ -1,6 +1,7 @@
 <div>
     <div  class="text-center pb-2">
-        <h2>List of Owned Reimbursement</h2>
+        <h3 *ngIf="_user.role == 'EMPLOYEE'">List of Pending Reimbursement</h3>
+        <h3 *ngIf="_user.role == 'MANAGER'">Queue for Pending Reimbursement</h3>
     </div>
     
   <table id="reimbursement-table" class="table text-start table-hover table-responsive table-responsive-sm">
@@ -17,7 +18,7 @@
         </tr>
     </thead>
     <tbody *ngFor="let item of _reimbursements | orderby: 'DESC': 'DateSubmitted'">
-        <tr>
+        <tr *ngIf="item.status == 'PENDING' ">
             <td class="ps-5 text-start" scope="col">{{item.reimbId}}</td>
             <td class="ps-5 text-start" scope="col">{{item.type}}</td>
             <td class="ps-5 text-start" scope="col">{{item.description}}</td>
@@ -34,4 +35,76 @@
     </tbody>
 </table>
 </div>
-  
+
+<div *ngIf="_user.role == 'EMPLOYEE'">
+    <div  class="text-center pb-2">
+        <h3>My Past Resolved Reimbursement</h3>
+    </div>
+    
+  <table id="reimbursement-table" class="table text-start table-hover table-responsive table-responsive-sm">
+    <thead>
+        <tr class="table-info ">
+            <th class="ps-5 text-start" Assoscope="col">ID</th>
+            <th class="ps-5 text-start" scope="col">Type</th>
+            <th class="ps-5 text-start col-2" scope="col">Description</th>
+            <th class="ps-5 text-start" scope="col">Status</th>
+            <th class="ps-5 text-start" scope="col">Amount</th>
+            <th class="ps-5 text-start" scope="col">Date Submitted</th>
+            <th class="ps-5 text-start" scope="col">Date Resolved</th>
+            <th class="ps-5 text-center" scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody  *ngFor="let item of _reimbursements | orderby: 'DESC': 'DateResolved'">
+        <tr *ngIf="item.status != 'PENDING' ">
+            <td class="ps-5 text-start" scope="col">{{item.reimbId}}</td>
+            <td class="ps-5 text-start" scope="col">{{item.type}}</td>
+            <td class="ps-5 text-start" scope="col">{{item.description}}</td>
+            <td class="ps-5 text-start" scope="col">{{item.status}}</td>
+            <td class="ps-5 text-start" scope="col">{{item.amount}}</td>
+            <td class="ps-5 text-start" scope="col">{{item.dateSubmitted}}</td>
+            <td class="ps-5 text-start" scope="col">{{item.dateResolved}}</td>
+            <td class="ps-5 text-center" scope="col">
+            <div>
+                <view-reimbursement-app [_reimbursementInput]="item"></view-reimbursement-app>
+            </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
+<div *ngIf="_user.role == 'MANAGER'">
+    <div  class="text-center pb-2">
+        <h3>List of Resolved Reimbursement</h3>
+    </div>
+    
+  <table id="reimbursement-table" class="table text-start table-hover table-responsive table-responsive-sm">
+    <thead>
+        <tr class="table-info ">
+            <th class="ps-5 text-start" Assoscope="col">ID</th>
+            <th class="ps-5 text-start" scope="col">Type</th>
+            <th class="ps-5 text-start col-2" scope="col">Description</th>
+            <th class="ps-5 text-start" scope="col">Status</th>
+            <th class="ps-5 text-start" scope="col">Amount</th>
+            <th class="ps-5 text-start" scope="col">Date Submitted</th>
+            <th class="ps-5 text-start" scope="col">Date Resolved</th>
+            <th class="ps-5 text-center" scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody *ngFor="let item of _resolvedReimbursements | orderby: 'DESC': 'DateResolved'">
+        <tr *ngIf="item.status != 'PENDING' ">
+            <td class="ps-5 text-start" scope="col">{{item.reimbId}}</td>
+            <td class="ps-5 text-start" scope="col">{{item.type}}</td>
+            <td class="ps-5 text-start" scope="col">{{item.description}}</td>
+            <td class="ps-5 text-start" scope="col">{{item.status}}</td>
+            <td class="ps-5 text-start" scope="col">{{item.amount}}</td>
+            <td class="ps-5 text-start" scope="col">{{item.dateSubmitted}}</td>
+            <td class="ps-5 text-start" scope="col">{{item.dateResolved}}</td>
+            <td class="ps-5 text-center" scope="col">
+            <div>
+                <view-reimbursement-app [_reimbursementInput]="item"></view-reimbursement-app>
+            </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</div>
