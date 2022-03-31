@@ -11,12 +11,20 @@ export class ReimbursementService {
 
   constructor(private httpClient: HttpClient, private genericService: GenericService) { }
 
-  getAllReimbursement(_loggedInUser: number): Observable<any>{
+  getAllReimbursement(): Observable<any>{
     return this.httpClient.get<any>(this.genericService._localServerDomain + `/reimbursement`, {withCredentials: true});
+  }
+
+  getAllReimbursementByStatus(statusId: number): Observable<any>{
+    return this.httpClient.get<any>(this.genericService._localServerDomain + `/reimbursement/status/${statusId}`, {withCredentials: true});
   }
 
   getAllOwnReimbursement(_loggedInUser: number): Observable<any>{
     return this.httpClient.get<any>(this.genericService._localServerDomain + `/reimbursement/userId/${_loggedInUser}`, {withCredentials: true});
+  }
+
+  getAllReimbursementByResolver(): Observable<any>{
+    return this.httpClient.get<any>(this.genericService._localServerDomain + `/reimbursement/resolved`, {withCredentials: true});
   }
 
   getReimbursementById(_reimbId: number): Observable<any>{
