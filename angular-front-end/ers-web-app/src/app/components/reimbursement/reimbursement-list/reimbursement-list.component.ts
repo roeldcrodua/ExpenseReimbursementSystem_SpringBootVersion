@@ -15,15 +15,17 @@ import { UserService } from 'src/app/services/user.service';
 export class ReimbursementListComponent implements OnInit, OnChanges {
   // USER
   _user: User = {
-    username: "",
+    userName: "",
     password: "",
     firstName: "",
     lastName: "",
     email: "",
     userId: 0,
-    role: ""
+    role: "",
+    picUrl: ""
   };
   // REIMBURSEMENT  
+  _resolvedReimbursements: Reimbursement[] = [];
   _reimbursements: Reimbursement[] = [];
   _reimbursement: Reimbursement = {
     reimbId: 0,
@@ -40,55 +42,29 @@ export class ReimbursementListComponent implements OnInit, OnChanges {
 
   @Input()
   _specifiedUser:  User = {
-    username: "",
+    userName: "",
     password: "",
     firstName: "",
     lastName: "",
     email: "",
     userId: 0,
-    role: ""
+    role: "",
+    picUrl: ""
   }
 
   hasChanges: boolean = false;
   navigationSubscription: any;
   observer: Subscription = new Subscription;
-  
+  _status: number = 0; // PENDING Reimbursement set to 0
+
   constructor(private userService: UserService, 
-              private reimbursementService: ReimbursementService, 
+              private reimbursementService: ReimbursementService,
               private router: Router) {  
                 this.populateTable();
                   }
 
   ngOnInit(): void {
-    this.userService.checkSession().subscribe(user => {
-      if (user.success) {
-        console.log("SUCCESS")
-        if (user.object.role == "EMPLOYEE"){
-          this._user = {
-            userId: user.object.userId,
-            username: user.object.username,
-            password: user.object.password,
-            firstName: user.object.firstName,
-            lastName: user.object.lastName,
-            email: user.object.email,
-            role: user.object.role
-          }
-          console.log(this._user)
-        } else { // FOR MANAGER
-          this._user = {
-            userId: this._specifiedUser.userId,
-            username: this._specifiedUser.username,
-            password: this._specifiedUser.password,
-            firstName: this._specifiedUser.firstName,
-            lastName: this._specifiedUser.lastName,
-            email: this._specifiedUser.email,
-            role: this._specifiedUser.role
-          }
-        }
-      } else {
-        this.router.navigate([``]);
-      }
-    }) 
+
   }
 
 
@@ -116,10 +92,42 @@ export class ReimbursementListComponent implements OnInit, OnChanges {
   }
 
   populateTable(){
-    this.observer = this.reimbursementService.getAllOwnReimbursement(this._user.userId).subscribe(reimb => {
+    this.userService.checkSession().subscribe(user => {
+      if (user.success) {
+        this._user = {
+          userId: user.object.userId,
+          userName: user.object.userName,
+          password: user.object.password,
+          firstName: user.object.firstName,
+          lastName: user.object.lastName,
+          email: user.object.email,
+          role: user.object.role,
+          picUrl: user.object.picUrl
+        }
+        console.log(this._user)
+      } else {
+        this.router.navigate([``]);
+      }
+    }) 
+    if (this._user.role == "EMPLOYEE"){
+      this.observer = this.reimbursementService.getAllOwnReimbursement(this._user.userId).subscribe(reimb => {
         if (reimb.success){
           this._reimbursements = reimb.object;  
         }
-    })
+      })
+    } else {
+      this.observer = this.reimbursementService.getAllReimbursementByResolver().subscribe(reimb => {
+        if (reimb.success){
+          this._resolvedReimbursements = reimb.object;           
+        }
+      })
+      this.observer = this.reimbursementService.getAllReimbursementByStatus(this._status).subscribe(reimb => {
+        const resultReimb = [];
+        if (reimb.success){
+          this._reimbursements = reimb.object; 
+        }
+      })     
+      
+    }
   }
 }
