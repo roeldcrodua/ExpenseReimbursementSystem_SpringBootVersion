@@ -14,7 +14,7 @@ import java.util.Optional;
 @Service("userService")
 public class UserService {
     private UserDao userDao;
-    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    static BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
     public UserService (UserDao userDao){
@@ -38,8 +38,16 @@ public class UserService {
     public User createUser(User user){
         Optional<User> temp = this.userDao.findUserByUsername(user.getUserName());
         if(!temp.isPresent()) {
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            return this.userDao.save(user);
+            // Need to remove the userId from the front-end
+            User inputUser = new User();
+            inputUser.setUserName(user.getUserName());
+            inputUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            inputUser.setEmail(user.getEmail());
+            inputUser.setFirstName(user.getFirstName());
+            inputUser.setLastName(user.getLastName());
+            inputUser.setRole(user.getRole());
+            inputUser.setPicUrl(user.getPicUrl());
+            return this.userDao.save(inputUser);
         }
         return null;
     }
@@ -53,14 +61,22 @@ public class UserService {
                 //Check if the user password is equal to database user password.
                 //If not equal then reset to a new password.
                 //No session required for this condition as this is from forgot-password
-                if (!passwordEncoder.matches(inputUser.getPassword(), dataBaseUser.getPassword())) {
-                    dataBaseUser.setPassword((passwordEncoder.encode(inputUser.getPassword())));
+
+                if (!inputUser.getPassword().equals(dataBaseUser.getPassword())) {
+                    if (!passwordEncoder.matches(inputUser.getPassword(), dataBaseUser.getPassword())) {
+                        dataBaseUser.setPassword(passwordEncoder.encode(inputUser.getPassword()));
+                    } else {
+                        dataBaseUser.setPassword(dataBaseUser.getPassword());
+                    }
                 }
                 if (!dataBaseUser.getFirstName().equals(inputUser.getFirstName())) {
                     dataBaseUser.setFirstName(inputUser.getFirstName());
                 }
                 if (!dataBaseUser.getLastName().equals(inputUser.getLastName())) {
                     dataBaseUser.setLastName(inputUser.getLastName());
+                }
+                if (!dataBaseUser.getRole().equals((inputUser.getRole()))){
+                    dataBaseUser.setRole(inputUser.getRole());
                 }
             } catch (Exception ignored){ }
             return this.userDao.save(dataBaseUser);
@@ -112,11 +128,12 @@ public class UserService {
             int randomIndex = random.nextInt(chars.length());
             sb.append(chars.charAt(randomIndex));
         }
+        System.out.println("NEW-PASSWORD: " + sb.toString());
         User newUser = new User();
         newUser.setEmail(email);
         newUser.setPassword(sb.toString());
         EmailService.sendEmail(newUser, "forgot");
-        return sb.toString();
+        return passwordEncoder.encode(sb.toString());
     }
 
 }
