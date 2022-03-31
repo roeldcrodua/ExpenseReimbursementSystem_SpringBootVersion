@@ -1,0 +1,22 @@
+#home-btn, #edit-btn, #logout-btn, #register-btn, #search-btn, #delete-btn, #reset-password-btn{
+    width: 145px;
+    margin: 10px;
+    margin-left: 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    height: 35px;
+  }
+  
+#cancel-btn, #editing-btn, #searching-btn, #deleting-btn{
+    width: 100px;
+    margin: 10px;
+    margin-left: 5px;
+    border-radius: 5px;
+    font-weight: bold;
+    height: 35px;
+  }
+  .border-left{
+    border-left-color: darkblue 3px;
+    border-left-style: solid;
+  }
+  

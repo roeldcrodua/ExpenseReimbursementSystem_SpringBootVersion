@@ -1,0 +1,101 @@
+<div class="col">
+    <button *ngIf="_isManager" class="btn-dark tooltip-top" title="Search feature is for Manager use only" id="home-btn" (click)="searchUser(user)">Search User 
+      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="" viewBox="0 0 16 16" id="seach-svg">
+      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+    </svg>
+  </button>
+  <button *ngIf="!_isManager" disabled class="btn-dark tooltip-top" title="Search feature is for Manager use only" id="home-btn" (click)="searchUser(user)">Search User 
+    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="white" class="" viewBox="0 0 16 16" id="seach-svg">
+    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+  </svg>
+</button>
+  </div>
+  <div class="col">
+    <button class="btn-info tooltip-top" title="Edit your profile" id="edit-btn" (click)="editProfile(user)">Update Profile</button>
+  </div>
+  <div class="col">
+    <button *ngIf="!_isManager" class="btn-primary tooltip-top" title="Admin/Manager can only register new user/employee" id="register-btn" disabled>Register User</button>
+    <button *ngIf="_isManager" class="btn-primary tooltip-top" title="Admin/Manager can only register new user/employee" id="register-btn" (click)="registerUser(user)">Register User</button>
+ </div>
+ <div class="col">
+    <button class="btn-warning tooltip-top small" title="Reset Password" id="reset-password-btn" (click)="changePassword(user)">Change Password</button>
+  </div>
+  
+
+  <ng-template #user let-modal>
+    <div class="modal-header bg-info text-center">
+        <h3 *ngIf="_isManager && _isSearchActivated" class="modal-title" id="modal-basic-title">Search User</h3>
+        <h3 *ngIf="_isManager && _isRegisteringUser" class="modal-title" id="modal-basic-title">Register New User</h3>
+        <h3 *ngIf="_isUpdatingUser" class="modal-title" id="modal-basic-title">Edit User Information</h3>
+        <h3 *ngIf="_isResetPassword" class="modal-title" id="modal-basic-title">Reset Password</h3>
+        <button type="button" class="btn btn-danger close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+      </button>
+  </div>
+    <div class="modal-body fw-bolder">
+        <form>
+            <div  *ngIf="_isRegisteringUser || !_isSearchActivated && !_isResetPassword" class="mb-2">
+                <label for="recipient-name" class="col-form-label fw-bolder">Employee ID Number</label>
+                <input type="text" class="form-control text-end" [value]="_userAccount.userId" name="_userAccount.userId"  aria-describedby="register-userName-help" disabled>
+            
+            </div>
+            <div class="mb-2">
+                <label for="recipient-name" class="col-form-label fw-bolder">Username</label>
+                <input *ngIf="_isSearchActivated || _isRegisteringUser" type="text" class="form-control text-end" [(ngModel)]="_userAccount.userName" name="_userAccount.userName"  aria-describedby="register-userName-help" (focus)="removeuserName()" (blur)="checkuserName()" placeholder="Username" autocomplete="">
+                <input *ngIf="!_isSearchActivated && !_isRegisteringUser" type="text" class="form-control text-end" [(ngModel)]="_userAccount.userName" name="_userAccount.userName"  aria-describedby="register-userName-help" (focus)="removeuserName()" (blur)="checkuserName()" autocomplete="" placeholder="Username" disabled>
+                <div *ngIf="_isRegisteringUser" id="register-userName-help" class="form-text text-danger text-end">{{_invaliduserNameMessage}}</div>
+            </div>
+            <div *ngIf="_isRegisteringUser || _isResetPassword" class="mb-2">
+                <label for="recipient-name" class="col-form-label fw-bolder">New Password</label>
+                <input type="password" class="form-control text-end" [(ngModel)]="_userAccount.password" name="_userAccount.password"  aria-describedby="register-password-help" (focus)="removePassword()" (blur)="checkPassword()" placeholder="Password">               
+                <div id="register-password-help" class="text-start form-text text-success text-end">{{_invalidPasswordMessage}}</div>
+            </div>
+            <div *ngIf="_isRegisteringUser || _isResetPassword" class="mb-2">
+                <label for="recipient-name" class="col-form-label fw-bolder">Confirm Password</label>
+                <input type="password" class="form-control text-end" [(ngModel)]="_confirmPassword" name="_confirmPassword"  aria-describedby="register-password-help" (focus)="removeConfirmPassword()" (blur)="checkConfirmPassword()" placeholder="Confirm Password">               
+                <div *ngIf="_isMatched" id="register-password-help" class="text-start form-text text-success text-end">{{_invalidConfirmPasswordMessage}}</div>
+                <div *ngIf="!_isMatched" id="register-password-help" class="text-start form-text text-danger text-end">{{_invalidConfirmPasswordMessage}}</div>
+            </div>
+            <div *ngIf="_isRegisteringUser ||_isUpdatingUser" class="mb-2">
+                <label for="recipient-name" class="col-form-label fw-bolder">First Name</label>
+                <input type="text" class="form-control text-end" placeholder="First Name" [(ngModel)]='_userAccount.firstName' name="_userAccount.firstName">
+            </div>
+            <div *ngIf="_isRegisteringUser || _isUpdatingUser" class="mb-2">
+                <label for="recipient-name" class="col-form-label fw-bolder">Last Name</label>
+                <input type="text" class="form-control text-end" placeholder="Last Name" [(ngModel)]='_userAccount.lastName' name="_userAccount.lastName">
+            </div>
+            <div *ngIf="!_isResetPassword" class="mb-2">
+                <label for="recipient-name" class="col-form-label fw-bolder">Email</label>
+                <input type="email" class="form-control text-end" [(ngModel)]="_userAccount.email" name="_userAccount.email" placeholder="Email Address">
+            </div>
+            <div *ngIf="_isRegisteringUser" class="mb-2">
+                <label for="recipient-name" class="col-form-label fw-bolder">User Role Type</label>
+                <select id="_type" name="_type" class="bg-light text-black mt-2 text-uppercase fw-bold form-control text-center" required [(ngModel)]="_userAccount.role">
+                    <option value="0" selected>Employee</option>
+                    <option value="1">Manager</option>
+                </select>               
+            </div>
+            <div *ngIf="_isUpdatingUser" class="mb-2">
+                <label for="recipient-name" class="col-form-label fw-bolder">User Role Type</label>
+                <input type="text" class="form-control text-end" placeholder="Role Type" [value]='_userAccount.role' name="_userAccount.role" disabled>           
+            </div>
+            <div *ngIf="_isRegisteringUser || _isUpdatingUser" class="mb-2">
+                <label for="recipient-name" class="col-form-label fw-bolder">Profile Photo URL</label>
+                <input type="picUrl" class="form-control text-end" [(ngModel)]="_userAccount.picUrl" name="_userAccount.picUrl" placeholder="Valid URL from the internet">         
+            </div>            
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div>
+            <h6 class="text-start" *ngIf="_isSearchActivated">{{_found}}</h6>
+        </div>
+        <div>
+            <button type="button" id="cancel-btn" class="btn-secondary" aria-label="Close" (click)="modal.dismiss('Cross click')">Cancel</button>
+            <app-confirm [_specifiedUser]="_userAccount" [_isUser]="_isUser" [_isManager]="_isManager" [_isSearchActivated]="_isSearchActivated" [_isRegisteringUser]="_isRegisteringUser" [_isRemovingUser]="_isRemovingUser" [_isUpdatingUser]="_isUpdatingUser" [_isResetPassword]="_isResetPassword"></app-confirm>
+            <button *ngIf="_isSearchActivated && _isFound" type="button" id="deleting-btn" class="btn-danger tooltip-top" title="Not yet implemented">Deactivate</button>
+            <button *ngIf="_isSearchActivated  && _isFound" type="button" id="editing-btn" class="btn-info" (click)="editProfile(user)">Edit</button>
+            <button *ngIf="_isSearchActivated" type="button" id="searching-btn" class="btn-primary" (click)="searchAUser()">Search</button>
+        </div> 
+    </div>
+  </ng-template>
+

@@ -11,24 +11,26 @@ import { UserService } from 'src/app/services/user.service';
 export class UserProfileComponent implements OnInit {
 
   _user: User = {
-    username: "",
+    userName: "",
     password: "",
     firstName: "",
     lastName: "",
     email: "",
     userId: 0,
-    role: ""
+    role: "",
+    picUrl: ""
   };
 
   @Input()
   _loggedInUser:  User = {
-    username: "",
+    userName: "",
     password: "",
     firstName: "",
     lastName: "",
     email: "",
     userId: 0,
-    role: ""
+    role: "",
+    picUrl: ""
   }
 
   constructor(private userService: UserService, private router: Router) { }
@@ -38,12 +40,13 @@ export class UserProfileComponent implements OnInit {
       if (user.success) {
         this._user = {
           userId: user.object.userId,
-          username: user.object.userName,
+          userName: user.object.userName,
           password: user.object.password,
           firstName: user.object.firstName,
           lastName: user.object.lastName,
           email: user.object.email,
-          role: user.object.role
+          role: user.object.role,
+          picUrl: user.object.picUrl
         }
       } else {
         this.router.navigate([``]);
