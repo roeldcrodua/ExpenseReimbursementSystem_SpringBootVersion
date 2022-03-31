@@ -1,9 +1,12 @@
-<button type="button" id="register-btn" class="btn btn-primary" (click)="addNewReimbursement(reimbursement)">Add</button>
-<button type="button" id="delete-btn" class="btn btn-danger" (click)="deleteReimbursement(reimbursement)">Delete</button>
-<button type="button" id="edit-btn" class="btn btn-warning" (click)="editReimbursement(reimbursement)">Edit</button>
+<button *ngIf="!_isUser && !_isDeletingReimbursment && !_isEditingReimbursment && _isAddingReimbursement" type="button" id="register-btn" class="btn btn-primary" (click)="addNewReimbursement(reimbursement)">Add</button>
+<button *ngIf="!_isUser && _isDeletingReimbursment && _user.role=='EMPLOYEE' && !_isProcessed" type="button" id="delete-btn" class="btn btn-danger" (click)="deleteReimbursement(reimbursement)">Delete</button>
+<button *ngIf="(!_isUser && !_isDeletingReimbursment && !_isAddingReimbursement) || _isEditingReimbursment && _user.role=='EMPLOYEE' && !_isProcessed" type="button" id="edit-btn" class="btn btn-warning" (click)="editReimbursement(reimbursement)">Edit</button>
+<button *ngIf="_isUser && !_isSearchActivated && _isRegisteringUser" type="button" id="register-btn" class="btn btn-primary" (click)="addNewUser(user)">Register</button>
+<button *ngIf="_isUser && !_isSearchActivated && !_isRegisteringUser && !_isUpdatingUser && !_isResetPassword" type="button" id="delete-btn" class="btn btn-danger" (click)="deleteUser(user)">Deactivate</button>
+<button *ngIf="_isUser && !_isSearchActivated && !_isRegisteringUser" type="button" id="edit-btn" class="btn btn-warning" (click)="editUser(user)">Update</button>
+<button *ngIf="(!_isSearchActivated && !_isEditingReimbursment && !_isAddingReimbursement && !_isUpdatingUser && !_isResetPassword && !_isRegisteringUser) || (_isManager && _reimbursementInput.status == 'PENDING')" type="button" id="edit-btn" class="btn btn-warning" (click)="resolveReimbursement(reimbursement)">Resolve</button>
 
-
-<ng-template #reimbursement let-modal>
+<ng-template #reimbursement #user let-modal>
     <div class="modal-header">
         <h4 class="fw-bolder text-center" >Confirm Action!</h4>
     </div>
