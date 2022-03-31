@@ -16,7 +16,12 @@ requests and past history for all employees in the company. Finance managers are
 
 ## Technologies Involved
 - Spring Boot
+- Angular
 
+## Project Goal
+- To perform the required technologies and skills as a Java Full Stack
+- To build an SPA (Single Page Application) from scratch.
+- To deploy the running app on a server and viewable online.
 
 ## Possible servelets endpoints:
 ### USERS
@@ -84,6 +89,7 @@ requests and past history for all employees in the company. Finance managers are
 - Add sort button in the column header
 - Add remarks field to be updated by manager upon process
 - Add paging on the row count limit to be displayed on the table
+- Add sorting on table data
 
 ## Application Snippet
 ### Login Form Page
@@ -102,10 +108,13 @@ requests and past history for all employees in the company. Finance managers are
 ![image](https://user-images.githubusercontent.com/65931708/159846736-5d59bbdd-e796-4ce7-88d5-34712621d8b9.png)
 
 
-### Reset Password Component
+### Change Password Component
 ![image](https://user-images.githubusercontent.com/65931708/161141626-dc97ce2d-40f0-42e4-af2f-c3807cac98d9.png)
 
 
 ### Register new user employee
 ![image](https://user-images.githubusercontent.com/65931708/161141523-3b3c1f80-0e18-49b0-9d7b-7ad23c674037.png)
+
+### Search existing user employee
+![image](https://user-images.githubusercontent.com/65931708/161143010-a96046df-c15c-4956-a9fc-513f877f3b38.png)
 
