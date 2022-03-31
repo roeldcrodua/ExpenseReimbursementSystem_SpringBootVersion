@@ -61,11 +61,6 @@ requests and past history for all employees in the company. Finance managers are
 - Created password generator
 - Added logging features using Log4j
 
-## TODOs to be done
-- Upload attachment via S3
-- Use JWT for session
-
-
 
 ## Features Added (FRONT-END)
 
@@ -80,27 +75,37 @@ requests and past history for all employees in the company. Finance managers are
 - Make it a single-page application composes of multiple components
 
 ## TODOs to be done
-- Auto-repopulate the table without reloading or refrsh the page
+- Auto-repopulate the table without reloading or refresh the page
 - Add the JWT functionality
+- Upload attachment via S3
+- Implement JWT and session storage
+- Fixed the refresh when new reimbursment added to the table.
+- Reflect the changes to the profile display once edited.
+- Add sort button in the column header
+- Add remarks field to be updated by manager upon process
+- Add paging on the row count limit to be displayed on the table
 
 ## Application Snippet
 ### Login Form Page
-![image](https://user-images.githubusercontent.com/65931708/159846540-a37eddaf-e945-41ad-91ca-647deb4b7b74.png)
+![image](https://user-images.githubusercontent.com/65931708/161141949-a9763bbf-f19a-48af-9d7d-8332e6c10640.png)
 
 
 ### Employee Dashboard Page
-![image](https://user-images.githubusercontent.com/65931708/159846603-457585e3-1d1a-4207-a672-b74068e54de1.png)
+![image](https://user-images.githubusercontent.com/65931708/161141856-78c96522-e9e8-4b30-8088-f9c4ed8e8428.png)
 
 
 ### Finance Manager Dashboard Page
+![image](https://user-images.githubusercontent.com/65931708/161141726-264293e0-44ec-440c-b408-44479c22944f.png)
 
 
 ### Creating/Viewing/Editing/Processing Reimbursement Form
 ![image](https://user-images.githubusercontent.com/65931708/159846736-5d59bbdd-e796-4ce7-88d5-34712621d8b9.png)
 
 
-### Reset Password Page
+### Reset Password Component
+![image](https://user-images.githubusercontent.com/65931708/161141626-dc97ce2d-40f0-42e4-af2f-c3807cac98d9.png)
 
 
 ### Register new user employee
+![image](https://user-images.githubusercontent.com/65931708/161141523-3b3c1f80-0e18-49b0-9d7b-7ad23c674037.png)
 
