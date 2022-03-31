@@ -3,23 +3,14 @@
 </div>
 <div class="mt-3 mb-5 w-100 d-inline-flex justify-content-center">
   <div class="">
-    <div class="col">
-      <button class="btn-dark tooltip-top" title="Back to HomePage" id="home-btn">Home</button>
-    </div>
-    <div class="col">
-      <button class="btn-warning tooltip-top" title="Reset Password" id="reset-password-btn">Reset Password</button>
-    </div>
-    <div class="col">
-      <button class="btn-info tooltip-top" title="Edit your profile" id="edit-btn">Update Profile</button>
-    </div>
-    <div class="col">
-      <button class="btn-primary tooltip-top" title="Admin/Manager can only register new user/employee" id="register-btn">Register User</button>
+    <div>
+      <app-user-info [_specifiedUser]="_user" ></app-user-info>
     </div>
     <div class="col">
       <view-reimbursement-app [_loggedInUser] = "_user" [_isNewReimbursement]="_isNewReimbursement"></view-reimbursement-app>
     </div>
     <div class="col">
-      <button class="btn-danger" id="logout-btn">Logout</button>
+      <button class="btn-danger" id="logout-btn" (click)="logout()">Logout</button>
     </div>
   </div>
   <div class="ms-4 border-left">
