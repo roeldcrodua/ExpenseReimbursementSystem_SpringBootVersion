@@ -1,3 +1,4 @@
+import { isFormattedError } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
@@ -9,12 +10,14 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class LoginComponent implements OnInit {
 
-  _username: string = "";
+  _userName: string = "";
   _password: string = "";
+  _email: string = "";
   _userId: number = 0;
-  _invalidUsernameMessage: string = "";
+  _invaliduserNameMessage: string = "";
   _invalidPasswordMessage: string = "";
   _isFound: boolean = false;
+  _isForgotPassword: boolean = false;
 
   constructor(private userService: UserService, private router:Router) { }
 
@@ -30,7 +33,9 @@ export class LoginComponent implements OnInit {
   }
 
   userLogin(){
-    this.userService.userLogin(this._username, this._password).subscribe(data => {
+    this.checkuserName();
+    this.checkPassword();
+    this.userService.userLogin(this._userName, this._password).subscribe(data => {
       console.log(data)
       if (data.success){
         this._userId = data.object.userId;
@@ -41,9 +46,9 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  removeUsername(){
-    this._invalidUsernameMessage = "";
-    this._username = "";
+  removeuserName(){
+    this._invaliduserNameMessage = "";
+    this._userName = "";
   }
 
   removePassword(){
@@ -57,30 +62,54 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  checkUsername(){
+  checkuserName(){
     this._isFound = false;
-    this._invalidUsernameMessage = "";
-    if (this._username.match("\@")){
-      this.userService.getUserByEmail(this._username).subscribe(data => {
-        if (data.object.email == this._username){
+    this._invaliduserNameMessage = "";
+    if (this._userName.match("\@")){
+      this.userService.getUserByEmail(this._userName).subscribe(data => {
+        if (data.object.email == this._userName){
           this._isFound = true;
-          this._invalidUsernameMessage = "";
+          this._invaliduserNameMessage = "";
+          this._email = data.object.email;
         }
       })
-    } else if (this._username != ""){
-      this.userService.getUserByUsername(this._username).subscribe(data => {
-        if (data.object.userName == this._username){
+    } else if (this._userName != ""){
+      this.userService.getUserByuserName(this._userName).subscribe(data => {
+        if (data.object.userName == this._userName){
           this._isFound = true;
-          this._invalidUsernameMessage = "";
+          this._invaliduserNameMessage = "";
+          this._email = data.object.email;
         }
 
       })
     }
 
-    if (this._username == ""){
-      this._invalidUsernameMessage = "Username is EMPTY!";
+    if (this._userName == ""){
+      this._invaliduserNameMessage = "Username is EMPTY!";
     } else if (!this._isFound) {
-      this._invalidUsernameMessage = "Username not found!";
+      this._invaliduserNameMessage = "Username not found!";
     }
+  }
+
+  forgotPassword(){
+    this._isFound=false;
+    this._isForgotPassword = true;
+  }
+
+  backToLogin(){
+    this._isForgotPassword = false;
+  }
+
+  resetPassword(){
+  this.checkuserName();
+  console.log(this._email);
+  if (this._email.match("\@")){
+    this.userService.forgotPassword(this._email).subscribe(data => {
+      if (data.success){
+        alert(data.message);
+      }
+    })
+  }
+
   }
 }
