@@ -1,6 +1,8 @@
 package com.ers.controllers;
 
-import com.ers.models.*;
+import com.ers.models.Reimbursement;
+import com.ers.models.Response;
+import com.ers.models.User;
 import com.ers.services.ReimbursementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 
 @RestController("reimbursementController")
-@RequestMapping(value="api")
+@RequestMapping(value="ers/api")
+@CrossOrigin(value= CrossOriginUtil.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class ReimbursementController {
     private ReimbursementService reimbursementService;
 

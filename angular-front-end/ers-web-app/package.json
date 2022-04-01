@@ -18,7 +18,11 @@
     "@angular/platform-browser": "~12.2.0",
     "@angular/platform-browser-dynamic": "~12.2.0",
     "@angular/router": "~12.2.0",
+    "@ng-bootstrap/ng-bootstrap": "^12.0.0",
+    "@syncfusion/ej2-react-popups": "^19.4.53",
+    "bootstrap": "^5.1.3",
     "rxjs": "~6.6.0",
+    "save": "^2.4.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },

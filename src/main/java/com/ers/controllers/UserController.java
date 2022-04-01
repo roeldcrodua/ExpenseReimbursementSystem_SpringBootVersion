@@ -9,10 +9,14 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @RestController("userController")
-@RequestMapping(value="api")
+@RequestMapping(value="ers/api")
+@CrossOrigin(value= CrossOriginUtil.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class UserController {
+    private static final Logger logger = Logger.getLogger(UserController.class.toString());
     private UserService userService;
     public EmailService emailService = new EmailService();
 
@@ -23,6 +27,7 @@ public class UserController {
 
     @GetMapping("user")
     public Response getAllUser(){
+        logger.log(Level.INFO, "Listing All Users\n {0)", this.userService.getAllUsers());
         return new Response(true, "Listing all users", this.userService.getAllUsers());
     }
 
@@ -33,7 +38,7 @@ public class UserController {
         return new Response(true, "Adding new user", userFromDb);
     }
 
-    @GetMapping("user/{id}")
+    @GetMapping("user/{userId}")
     public Response getUserById(@PathVariable Integer userId){
         User user = this.userService.getUserById(userId);
 
@@ -44,7 +49,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("user/{username}")
+    @GetMapping("user/username/{username}")
     public Response getUserByUsername(@PathVariable String username){
         User user = this.userService.getUserByUsername(username);
 
@@ -55,7 +60,7 @@ public class UserController {
         }
     }
 
-    @GetMapping("user/{email}")
+    @GetMapping("user/email/{email}")
     public Response getUserByEmail(HttpSession session, @PathVariable String email) {
         User currentUser = this.userService.getUserByEmail(email);
 
@@ -74,10 +79,10 @@ public class UserController {
 
         User currentUser = this.userService.editUser(sessionUser, inputUser);
         if (currentUser != null) {
-            if (BCrypt.checkpw(inputUser.getPassword(), sessionUser.getPassword())) {
+            if (inputUser.getPassword().equals(currentUser.getPassword())) {
                 EmailService.sendEmail(currentUser, "update");
                 return new Response(true, "Profile was successfully updated.", currentUser);
-            } else {
+            }else {
                 EmailService.sendEmail(currentUser, "reset");
                 return new Response(true, "Password was successfully updated.", currentUser);
             }
@@ -142,7 +147,7 @@ public class UserController {
     }
 
     @PatchMapping("forgot-password/{email}")
-    public Response forgotPassword(@PathVariable String email) {
+    public Response forgotPassword(HttpSession session, @PathVariable String email) {
         try{
             User oldUser;
 

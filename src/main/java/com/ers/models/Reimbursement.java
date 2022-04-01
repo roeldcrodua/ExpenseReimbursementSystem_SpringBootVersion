@@ -1,5 +1,6 @@
 package com.ers.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,12 +22,14 @@ public class Reimbursement {
     private int reimbId;
 
     @Column(name="amount", nullable = false)
-    private int amount;
+    private double amount;
 
     @Column(name="date_submitted", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH-mm-ss")
     private Date dateSubmitted;
 
     @Column(name="date_resolved")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH-mm-ss")
     private Date dateResolved;
 
     @Column(name="description", nullable = false)
@@ -43,6 +46,9 @@ public class Reimbursement {
 
     @Column(name="status", nullable = false)
     private ReimbStatus status;
+
+    @Column(name="remarks")
+    private String remarks;
 
     @Column(name="type", nullable = false)
     private ReimbType type;

@@ -1,8 +1,9 @@
 package com.ers.services;
 
 import com.ers.models.Reimbursement;
-import com.ers.models.User;
 import com.ers.repository.ReimbursementDao;
+import com.ers.models.User;
+
 import java.util.Collections;
 import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;

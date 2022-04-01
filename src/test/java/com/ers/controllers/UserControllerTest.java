@@ -1,6 +1,5 @@
-package com.revature.ers.controllers;
+package com.ers.controllers;
 
-import com.ers.controllers.UserController;
 import com.ers.models.Response;
 import com.ers.models.User;
 import com.ers.services.UserService;
@@ -34,7 +33,7 @@ class UserControllerTest {
     void getAllUser() {
         //assign
         List<User>  users = new ArrayList<>();
-        users.add(new User(1, "roel", "crodua", "Roel", "Crodua", "roel@mail.com", null, null));
+        users.add(new User(1, "roel", "crodua", "Roel", "Crodua", "roel@mail.com", null,null));
         Response expectedResult = new Response(true, "Listing all users", users);
 
         //mock

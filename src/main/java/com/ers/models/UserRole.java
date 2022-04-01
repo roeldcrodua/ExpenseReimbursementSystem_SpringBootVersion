@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public enum UserRole {
     EMPLOYEE(0),
-    MANAGER(1);
+    MANAGER(1),
+    ADMIN(2);
 
     private int roleId;
 

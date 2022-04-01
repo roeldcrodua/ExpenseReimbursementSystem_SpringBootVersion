@@ -5,8 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-
-
 @SpringBootApplication
 public class ErsApplication {
 
@@ -20,6 +18,4 @@ public class ErsApplication {
 		LOGGER.warn("Waning level log messages");
 		LOGGER.error("Error level log messages");
 	}
-
-
 }
