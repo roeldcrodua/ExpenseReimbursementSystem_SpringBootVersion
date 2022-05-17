@@ -25,11 +25,11 @@ public class Reimbursement {
     private double amount;
 
     @Column(name="date_submitted", nullable = false)
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH-mm-ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm:ss")
     private Date dateSubmitted;
 
     @Column(name="date_resolved")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH-mm-ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM-dd-yyyy HH:mm:ss")
     private Date dateResolved;
 
     @Column(name="description", nullable = false)
