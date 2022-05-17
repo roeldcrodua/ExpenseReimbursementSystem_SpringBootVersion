@@ -1,11 +1,11 @@
 package com.ers.services;
 
+import com.ers.models.UserRole;
 import com.ers.repository.UserDao;
 import com.ers.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import java.security.SecureRandom;
 import java.util.List;
@@ -21,12 +21,16 @@ public class UserService {
         this.userDao = userDao;
     }
 
-    public List<User> getAllUsers(){
-        List<User> users = this.userDao.findAll();
-        for(User a : users){
-            a.setPassword(null);
+    public User verifyUser(String userName){
+        try {
+            if (userName.matches("@")) {
+                return getUserByEmail(userName);
+            } else {
+                return getUserByUsername(userName);
+            }
+        } catch (Exception ex) {
+            return null;
         }
-        return users;
     }
 
     public User getUserById(Integer userId){
@@ -41,12 +45,18 @@ public class UserService {
             // Need to remove the userId from the front-end
             User inputUser = new User();
             inputUser.setUserName(user.getUserName());
-            inputUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            inputUser.setPassword(newPassword(user.getEmail()));
             inputUser.setEmail(user.getEmail());
             inputUser.setFirstName(user.getFirstName());
             inputUser.setLastName(user.getLastName());
-            inputUser.setRole(user.getRole());
             inputUser.setPicUrl(user.getPicUrl());
+            for (UserRole role: UserRole.values()){
+                if (role == user.getRole()){
+                    inputUser.setRole(role);
+                }
+            }
+            System.out.println("IN CREATE USER Service");
+            System.out.println(inputUser);
             return this.userDao.save(inputUser);
         }
         return null;
@@ -64,7 +74,12 @@ public class UserService {
 
                 if (!inputUser.getPassword().equals(dataBaseUser.getPassword())) {
                     if (!passwordEncoder.matches(inputUser.getPassword(), dataBaseUser.getPassword())) {
-                        dataBaseUser.setPassword(passwordEncoder.encode(inputUser.getPassword()));
+
+                        if (inputUser.getPassword() != null && inputUser.getPassword().length() >= 3) {
+                            dataBaseUser.setPassword(passwordEncoder.encode(inputUser.getPassword()));
+                        } else {
+                            dataBaseUser.setPassword(dataBaseUser.getPassword());
+                        }
                     } else {
                         dataBaseUser.setPassword(dataBaseUser.getPassword());
                     }
@@ -78,6 +93,9 @@ public class UserService {
                 if (!dataBaseUser.getRole().equals((inputUser.getRole()))){
                     dataBaseUser.setRole(inputUser.getRole());
                 }
+                if (!dataBaseUser.getPicUrl().equals((inputUser.getPicUrl()))){
+                    dataBaseUser.setPicUrl(inputUser.getPicUrl());
+                }
             } catch (Exception ignored){ }
             return this.userDao.save(dataBaseUser);
         }
@@ -85,26 +103,6 @@ public class UserService {
     }
 
 
-    public Boolean deleteUser(User manager, String input) {
-        Integer userId;
-        if (manager.getRole().getRoleId() == 1) {
-            if (NumberUtils.isParsable(input)) {
-                userId = this.userDao.findById(Integer.parseInt(input)).isPresent() ? this.userDao.findById(Integer.parseInt(input)).get().getUserId() : 0;
-            } else if (input.contains("@")) {
-                userId = this.userDao.findUserByEmail(input).isPresent() ? this.userDao.findUserByEmail(input).get().getUserId() : 0;
-            } else {
-                userId = this.userDao.findUserByUsername(input).isPresent() ? this.userDao.findUserByUsername(input).get().getUserId() : 0;
-            }
-            try {
-                this.userDao.deleteById(userId);
-                return true;
-            } catch (Exception ignore) {
-                return false;
-            }
-        } else {
-            return false;
-        }
-    }
     public User getUserByUsername(String username){
         return this.userDao.findUserByUsername(username).orElse(null);
     }
@@ -132,7 +130,7 @@ public class UserService {
         User newUser = new User();
         newUser.setEmail(email);
         newUser.setPassword(sb.toString());
-        EmailService.sendEmail(newUser, "forgot");
+        //EmailService.sendEmail(newUser, "forgot");
         return passwordEncoder.encode(sb.toString());
     }
 

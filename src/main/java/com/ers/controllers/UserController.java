@@ -1,122 +1,145 @@
 package com.ers.controllers;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.ers.models.Response;
 import com.ers.models.User;
 import com.ers.services.EmailService;
+import com.ers.services.JWTService;
 import com.ers.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Map;
 
 @RestController("userController")
 @RequestMapping(value="ers/api")
 @CrossOrigin(value= CrossOriginUtil.CROSS_ORIGIN_VALUE, allowCredentials = "true")
 public class UserController {
-    private static final Logger logger = Logger.getLogger(UserController.class.toString());
     private UserService userService;
     public EmailService emailService = new EmailService();
+    private JWTService jwtService = new JWTService();
 
     @Autowired
-    public UserController(UserService userService){
+    public UserController(UserService userService, JWTService jwtService){
         this.userService = userService;
+        this.jwtService = jwtService;
     }
 
-    @GetMapping("user")
-    public Response getAllUser(){
-        logger.log(Level.INFO, "Listing All Users\n {0)", this.userService.getAllUsers());
-        return new Response(true, "Listing all users", this.userService.getAllUsers());
+    @PostMapping("user/verify")
+    public Response verifyUser(@RequestBody String user){
+        try {
+            return new Response(true, "Verified user", this.userService.verifyUser(user));
+        } catch (Exception ex){
+            ex.printStackTrace();
+            return new Response(false, "User not found", null);
+        }
     }
 
     @PostMapping("user")
     public Response createUser(@RequestBody User user){
+        System.out.println("IN CREATE USER Controller");
         User userFromDb = this.userService.createUser(user);
-        EmailService.sendEmail(userFromDb, "new");
-        return new Response(true, "Adding new user", userFromDb);
+        if (userFromDb == null) {
+            return new Response(false, "Failed to create a new user", null);
+        } else {
+            //EmailService.sendEmail(userFromDb, "new");
+            return new Response(true, jwtService.genToken(userFromDb), userFromDb);
+        }
     }
 
     @GetMapping("user/{userId}")
-    public Response getUserById(@PathVariable Integer userId){
-        User user = this.userService.getUserById(userId);
+    public Response getUserById(@PathVariable Integer userId, @RequestHeader Map<String, String> header){
+        DecodedJWT decoded = jwtService.verify(header.get("authorization"));
+        if (decoded == null) {
+            return new Response(false, "Invalid Token, try again.", null);
+        } else {
+            User user = this.userService.getUserById(userId);
 
-        if (user != null) {
-            return new Response(true, "User was found", user);
-        } else{
-            return new Response(false, "User not found", null);
+            if (user != null) {
+                return new Response(true, jwtService.genToken(user), user);
+            } else {
+                return new Response(false, "User not found", null);
+            }
         }
     }
 
     @GetMapping("user/username/{username}")
-    public Response getUserByUsername(@PathVariable String username){
-        User user = this.userService.getUserByUsername(username);
+    public Response getUserByUsername(@PathVariable String username, @RequestHeader Map<String, String> header){
+        DecodedJWT decoded = jwtService.verify(header.get("authorization"));
+        if (decoded == null) {
+            return new Response(false, "Invalid Token, try again.", null);
+        } else {
+            User user = this.userService.getUserByUsername(username);
 
-        if (user != null) {
-            return new Response(true, "User was found", user);
-        } else{
-            return new Response(false, "User not found", null);
+            if (user != null) {
+                return new Response(true, jwtService.genToken(user), user);
+            } else {
+                return new Response(false, "User not found", null);
+            }
         }
     }
 
     @GetMapping("user/email/{email}")
-    public Response getUserByEmail(HttpSession session, @PathVariable String email) {
-        User currentUser = this.userService.getUserByEmail(email);
+    public Response getUserByEmail(@PathVariable String email, @RequestHeader Map<String, String> header){
+        DecodedJWT decoded = jwtService.verify(header.get("authorization"));
+        if (decoded == null) {
+            return new Response(false, "Invalid Token, try again.", null);
+        } else {
+            User currentUser = this.userService.getUserByEmail(email);
 
-        if (currentUser != null){
-            return new Response(true, "User found with the associated email "+ email, currentUser);
-        }else {
-            return new Response(false, "Email does not exist in the system", null);
+            if (currentUser != null) {
+                return new Response(true, "Email was found in the system", currentUser);
+            } else {
+                return new Response(false, "Email does not exist in the system", null);
+            }
         }
     }
 
     @PatchMapping("user")
-    public Response editUser(HttpSession session, @RequestBody User inputUser) {
-        User sessionUser = (User) session.getAttribute("userInSession");
-        if(sessionUser == null)
-            return new Response(false, "No session found! Please login to continue.", null);
+    public Response editUser(@RequestBody User inputUser,@RequestHeader Map<String, String> header){
+        DecodedJWT decoded = jwtService.verify(header.get("authorization"));
+        System.out.println("EDIT USER");
+        System.out.println(inputUser);
 
-        User currentUser = this.userService.editUser(sessionUser, inputUser);
-        if (currentUser != null) {
-            if (inputUser.getPassword().equals(currentUser.getPassword())) {
-                EmailService.sendEmail(currentUser, "update");
-                return new Response(true, "Profile was successfully updated.", currentUser);
-            }else {
-                EmailService.sendEmail(currentUser, "reset");
-                return new Response(true, "Password was successfully updated.", currentUser);
-            }
+        if (decoded == null) {
+            return new Response(false, "Invalid Token, try again.", null);
         } else {
+            String userNameString = decoded.getClaims().get("userName").toString();
+            System.out.println("TOKEN USERNAME");
+            System.out.println(userNameString.substring(1,userNameString.length()-1));
+            if (userNameString.substring(1,userNameString.length()-1).equals(inputUser.getUserName())) {
+
+                User sessionUser = new User();
+                sessionUser.setUserId(decoded.getClaims().get("userId").asInt());
+                System.out.println("SESSION USER");
+                System.out.println(sessionUser);
+                User currentUser = this.userService.editUser(sessionUser, inputUser);
+                if (currentUser != null) {
+                    if (inputUser.getPassword().equals(currentUser.getPassword())) {
+                        //EmailService.sendEmail(currentUser, "update");
+                        return new Response(true, "Profile was successfully updated.", currentUser);
+                    } else {
+                        //EmailService.sendEmail(currentUser, "reset");
+                        return new Response(true, "Password was successfully updated.", currentUser);
+                    }
+                }
+            } else {
+                if (decoded.getClaims().get("role").toString().matches("MANAGER")){
+                    User sessionUser = new User();
+                    sessionUser.setUserId(decoded.getClaims().get("userId").asInt());
+                    User currentUser = this.userService.editUser(sessionUser, inputUser);
+                    //EmailService.sendEmail(currentUser, "update");
+                    return new Response(true, "Profile was successfully updated.", currentUser);
+                }
+            }
             return new Response(false, "Error occurred during the profile update.", null);
         }
-    }
-
-    @DeleteMapping("user/{input}")
-    public Response deleteUser(HttpSession session, @PathVariable String input){
-        User sessionUser = (User) session.getAttribute("userInSession");
-        if(sessionUser == null)
-            return new Response(false, "No session found! Please login to continue.", null);
-        Boolean isDeleted = this.userService.deleteUser(sessionUser, input);
-        if (Boolean.FALSE.equals(isDeleted)) {
-            return new Response(false, "Error occurred during the profile deletion.", input);
-        } else {
-            return new Response(true, "Profile was successfully deleted.", input);
-        }
-    }
-
-
-    @GetMapping("check-session")
-    public Response checkSession(HttpSession session) {
-        User user = (User) session.getAttribute("userInSession");
-        if(user != null)
-            return new Response(true, "Session found", user);
-        else
-            return new Response(false, "Session not found", null);
-    }
+     }
 
     //Checks to see if user is in database otherwise it'll reject their log in
     @PostMapping("login")
-    public Response login(HttpSession session, @RequestBody User user) {
+    public Response login(@RequestBody User user) {
         try {
             User currentUser;
             if (!user.getUserName().isEmpty()){
@@ -127,44 +150,46 @@ public class UserController {
                 currentUser = null;
             }
 
-            // Use BCrypt checkpw() method to see if the input password matches the hashed value of the password
-            if (BCrypt.checkpw(user.getPassword(), currentUser.getPassword())) {
-                session.setAttribute("userInSession", currentUser);
-                return new Response(true, "Log in successful, session created", currentUser);
-            } else {
-                return new Response(false, "Invalid Username or Password", null);
+            if (currentUser !=null) {
+                // Use BCrypt checkpw() method to see if the input password matches the hashed value of the password
+                if (BCrypt.checkpw(user.getPassword(), currentUser.getPassword())) {
+                    return new Response(true, jwtService.genToken(currentUser), null);
+                } else {
+                    return new Response(false, "Invalid Username or Password", null);
+                }
             }
-        } catch(Exception ex){
             return new Response(false, "User not found", null);
+        } catch(Exception ex){
+            return new Response(false, "Error encountered during login", null);
         }
     }
 
 
-    @GetMapping("logout")
-    public Response logout(HttpSession session) {
-        session.setAttribute("userInSession", null);
-        return new Response(true, "Session terminated", null);
-    }
-
     @PatchMapping("forgot-password/{email}")
-    public Response forgotPassword(HttpSession session, @PathVariable String email) {
-        try{
+    public Response forgotPassword(@PathVariable String email){
+        try {
             User oldUser;
-
-            if (email.contains("@")){
+            System.out.println("IN FORGOT PASSWORD");
+            System.out.println(email);
+            if (email.contains("@")) {
                 oldUser = this.userService.getUserByEmail(email);
             } else {
                 oldUser = this.userService.getUserByUsername(email);
             }
+            System.out.println(oldUser);
+            if (oldUser != null) {
+                String password = UserService.newPassword(oldUser.getEmail());
 
-            String password = UserService.newPassword(oldUser.getEmail());
-
-            User newUser = oldUser;
-            newUser.setPassword(password);
-            this.userService.editUser(oldUser, newUser);
-            return  new Response(true, "Password was successfully updated. Forgot-reset password email sent", newUser);
+                User newUser;
+                newUser = oldUser;
+                newUser.setPassword(password);
+                this.userService.editUser(oldUser, newUser);
+                return new Response(true, jwtService.genToken(newUser), null);
+            }
+            return new Response(false, "Email/Username not found. ", null);
         } catch (Exception ex) {
-            return new Response(false, "Email/Username not found. " + ex, null);
+            return new Response(false, "Error encountered during forgot password. " + ex, null);
         }
     }
+
 }

@@ -1,5 +1,6 @@
 package com.ers.services;
 
+import com.ers.models.ReimbStatus;
 import com.ers.models.Reimbursement;
 import com.ers.repository.ReimbursementDao;
 import com.ers.models.User;
@@ -32,6 +33,7 @@ public class ReimbursementService {
     public Reimbursement createReimbursement(User sessionUser,Reimbursement reimbursement) {
         reimbursement.setAuthor(sessionUser.getUserId());
         reimbursement.setDateSubmitted(DateTime.now().toDate());
+        System.out.println("IN CREATE REIMBURSEMENT: " + reimbursement.getDateSubmitted());
         return this.reimbursementDao.save(reimbursement);
     }
 
@@ -47,13 +49,16 @@ public class ReimbursementService {
     }
 
     public Reimbursement editReimbursement(User sessionUser, Reimbursement reimbursement) {
+//        if (sessionUser.getUserId() == reimbursement.getAuthor()){
+//            // make sure that owner can only edit his own reimbursement
+//            // else you should be a Manager.
+//            reimbursement.setStatus(ReimbStatus.valueOf("PENDING"));
+//        }
         if (sessionUser.getRole().toString().equals("MANAGER")){
             reimbursement.setResolver(sessionUser.getUserId());
             reimbursement.setDateResolved(DateTime.now().toDate());
-        } else if (sessionUser.getUserId() != reimbursement.getAuthor()){
-            // make sure that owner can only edit his own reimbursement
-            // else you should be a Manager.
-            return null;
+            System.out.println("RESOLVING TICKET");
+            System.out.println(reimbursement);
         }
         return this.reimbursementDao.save(reimbursement);
     }
