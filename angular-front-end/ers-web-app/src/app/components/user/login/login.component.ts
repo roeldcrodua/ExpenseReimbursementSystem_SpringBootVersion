@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/services/user.service';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -18,32 +19,43 @@ export class LoginComponent implements OnInit {
   _invalidPasswordMessage: string = "";
   _isFound: boolean = false;
   _isForgotPassword: boolean = false;
+  _token: any;
+  _user: any;
 
-  constructor(private userService: UserService, private router:Router) { }
 
-  ngOnInit(): void {    
-    this.userService.checkSession().subscribe(data => {
-      console.log(data)
-      if (data.success){
-        this.router.navigate([`/dashboard`]);
-      } else {
-        this.router.navigate([`/login/`]);
-      }
-    })
+  constructor(private userService: UserService, private router: Router) { 
+
+  }
+  ngOnInit(){
+    this._token = sessionStorage.getItem('JWT');
+
+    if (this._token != null){
+      this._user = sessionStorage.getItem('userObj');
+
+      if (this.userService.isValidToken(this._user.exp)){
+        this.router.navigate([`/dashboard/`]);
+      } 
+    }
   }
 
+
+
   userLogin(){
+    console.log("LOGIN")
     this.checkuserName();
     this.checkPassword();
     this.userService.userLogin(this._userName, this._password).subscribe(data => {
       console.log(data)
       if (data.success){
-        this._userId = data.object.userId;
+        this.userService.getDecodedAccessToken(data.message);
+        this._user = sessionStorage.getItem('userObj');
+        this._userId = this._user.userId;
         this.router.navigate([`/dashboard/`]);
       } else {
         this._invalidPasswordMessage = "Invalid password";
       }
     })
+
   }
 
   removeuserName(){
@@ -66,7 +78,7 @@ export class LoginComponent implements OnInit {
     this._isFound = false;
     this._invaliduserNameMessage = "";
     if (this._userName.match("\@")){
-      this.userService.getUserByEmail(this._userName).subscribe(data => {
+      this.userService.verifyUser(this._userName).subscribe(data => {
         if (data.object.email == this._userName){
           this._isFound = true;
           this._invaliduserNameMessage = "";
@@ -74,7 +86,7 @@ export class LoginComponent implements OnInit {
         }
       })
     } else if (this._userName != ""){
-      this.userService.getUserByuserName(this._userName).subscribe(data => {
+      this.userService.verifyUser(this._userName).subscribe(data => {
         if (data.object.userName == this._userName){
           this._isFound = true;
           this._invaliduserNameMessage = "";
@@ -103,13 +115,11 @@ export class LoginComponent implements OnInit {
   resetPassword(){
   this.checkuserName();
   console.log(this._email);
-  if (this._email.match("\@")){
-    this.userService.forgotPassword(this._email).subscribe(data => {
-      if (data.success){
-        alert(data.message);
-      }
-    })
-  }
+  this.userService.forgotPassword(this._email).subscribe(data => {
+    if (data.success){
+      this.userService.getDecodedAccessToken(data.message);
+    }
+  })
 
   }
 }

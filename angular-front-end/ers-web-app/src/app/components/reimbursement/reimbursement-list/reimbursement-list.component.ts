@@ -71,7 +71,8 @@ export class ReimbursementListComponent implements OnInit, OnChanges {
   viewReimbursement(reimbId: number){
     this.reimbursementService.getReimbursementById(reimbId).subscribe(reimb => {
       if (reimb.success){
-        console.log(reimb)
+        console.log("VIEW REIMB")
+        console.log(reimb.object)
       }
     })
   }
@@ -92,39 +93,32 @@ export class ReimbursementListComponent implements OnInit, OnChanges {
   }
 
   populateTable(){
-    this.userService.checkSession().subscribe(user => {
-      if (user.success) {
-        this._user = {
-          userId: user.object.userId,
-          userName: user.object.userName,
-          password: user.object.password,
-          firstName: user.object.firstName,
-          lastName: user.object.lastName,
-          email: user.object.email,
-          role: user.object.role,
-          picUrl: user.object.picUrl
-        }
-        console.log(this._user)
-      } else {
-        this.router.navigate([``]);
-      }
-    }) 
+    this._user = JSON.parse(sessionStorage.getItem('userObj')!); 
+    if(this._user == null){
+      this.router.navigateByUrl('')
+    }
+
     if (this._user.role == "EMPLOYEE"){
       this.observer = this.reimbursementService.getAllOwnReimbursement(this._user.userId).subscribe(reimb => {
         if (reimb.success){
+          console.log("IN POPULATE TABLE")
+          console.log(reimb.object)
           this._reimbursements = reimb.object;  
         }
       })
     } else {
       this.observer = this.reimbursementService.getAllReimbursementByResolver().subscribe(reimb => {
         if (reimb.success){
-          this._resolvedReimbursements = reimb.object;           
+          this._resolvedReimbursements = reimb.object;     
+          console.log("IN GET ALL REIMBURSEMENT BY RESOLVER")      
+          console.log(this._resolvedReimbursements)
         }
       })
       this.observer = this.reimbursementService.getAllReimbursementByStatus(this._status).subscribe(reimb => {
-        const resultReimb = [];
         if (reimb.success){
           this._reimbursements = reimb.object; 
+          console.log("IN GET ALL REIMBURSEMENT BY STATUS")      
+          console.log(this._resolvedReimbursements)
         }
       })     
       

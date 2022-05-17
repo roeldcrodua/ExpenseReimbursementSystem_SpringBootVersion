@@ -36,24 +36,11 @@ export class UserProfileComponent implements OnInit {
   constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
-    this.userService.checkSession().subscribe(user => {
-      if (user.success) {
-        this._user = {
-          userId: user.object.userId,
-          userName: user.object.userName,
-          password: user.object.password,
-          firstName: user.object.firstName,
-          lastName: user.object.lastName,
-          email: user.object.email,
-          role: user.object.role,
-          picUrl: user.object.picUrl
-        }
-      } else {
-        this.router.navigate([``]);
-      }
-    })  
+    this._user = JSON.parse(sessionStorage.getItem('userObj')!);
 
+    if(this._user == null){
+      this.router.navigateByUrl('')
+    }
   }
-
 
 }

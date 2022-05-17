@@ -16,15 +16,14 @@ export class DashboardComponent implements OnInit {
   constructor(private userService: UserService, private router:Router) { }
 
   ngOnInit(): void {
-    this.userService.checkSession().subscribe(data => {
-      if (data.success){
-        this.router.navigate([`/dashboard`]);
-        this._user = data.object;
-        console.log(data.object)
-      } else {
-        this.router.navigate([`/login/`]);
-      }
-    })
+    console.log("DASHBOARD")
+    this._user = JSON.parse(sessionStorage.getItem('userObj')!); 
+    if(this._user == null){
+      this.router.navigateByUrl('')
+    } else {
+      console.log(this._user);
+      this.router.navigate([`/dashboard`]);
+    }
   }
 
 }

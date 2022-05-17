@@ -5,6 +5,7 @@ import {NgbModal, ModalDismissReasons}
 import { UserService } from 'src/app/services/user.service';
 import { ReimbursementService } from 'src/app/services/reimbursement.service';
 import { User } from 'src/app/model/user';
+import { Router } from '@angular/router';
 
 
 
@@ -70,8 +71,18 @@ export class ViewModalComponent {
     _description: String = "";
     _amount:  any;
     date: Date = new Date(); 
-    _dateSubmitted: any = (this.date.getMonth()+1).toString().padStart(2, '0')+ "-" + this.date.getDate() + "-" + this.date.getFullYear();
-    _dateResolved: any = (this.date.getMonth()+1).toString().padStart(2, '0') + "-" + this.date.getDate() + "-" + this.date.getFullYear();
+    _dateSubmitted: any = ((this.date.getMonth() + 1) < 10 ? '0'+ (this.date.getMonth() + 1) : this.date.getMonth()) +
+                         "-" + ((this.date.getDate() + 1) < 10 ? '0'+ (this.date.getDate() + 1) : this.date.getDate()) +
+                         "-" + this.date.getFullYear() +
+                         " " + (parseInt(this.date.getHours().toString().substring(0,2)) < 10 ? '0'+ this.date.getHours().toString().substring(0,2) : this.date.getHours().toString().substring(0,2)) + 
+                         ":" + (parseInt(this.date.getMinutes().toString().substring(0,2)) < 10 ? '0'+ this.date.getMinutes().toString().substring(0,2) : this.date.getMinutes().toString().substring(0,2)) + 
+                         ":" + (parseInt(this.date.getSeconds().toString().substring(0,2)) < 10 ? '0'+ this.date.getSeconds().toString().substring(0,2) : this.date.getSeconds().toString().substring(0,2));
+    _dateResolved: any = ((this.date.getMonth() + 1) < 10 ? '0'+ (this.date.getMonth() + 1) : this.date.getMonth()) +
+                         "-" + ((this.date.getDate() + 1) < 10 ? '0'+ (this.date.getDate() + 1) : this.date.getDate()) +
+                         "-" + this.date.getFullYear() +
+                         " " + (parseInt(this.date.getHours().toString().substring(0,2)) < 10 ? '0'+ this.date.getHours().toString().substring(0,2) : this.date.getHours().toString().substring(0,2)) + 
+                         ":" + (parseInt(this.date.getMinutes().toString().substring(0,2)) < 10 ? '0'+ this.date.getMinutes().toString().substring(0,2) : this.date.getMinutes().toString().substring(0,2)) + 
+                         ":" + (parseInt(this.date.getSeconds().toString().substring(0,2)) < 10 ? '0'+ this.date.getSeconds().toString().substring(0,2) : this.date.getSeconds().toString().substring(0,2));
     _isAddingReimbursement: boolean = false;
     _isDeletingReimbursment: boolean = false;
     _isEditingReimbursment: boolean = false;
@@ -80,29 +91,20 @@ export class ViewModalComponent {
 
     constructor(private modalService: NgbModal,
                 private userService: UserService,
-                private reimbursementService: ReimbursementService){
+                private router: Router){
         
     }
 
     ngOnInit(): void {
-        this.userService.checkSession().subscribe(user => {
-            if (user.success) {
-              this._loggedInUser = {
-                userId: user.object.userId,
-                userName: user.object.userName,
-                password: user.object.password,
-                firstName: user.object.firstName,
-                lastName: user.object.lastName,
-                email: user.object.email,
-                role: user.object.role,
-                picUrl: user.object.picUrl
-              }
-            }
-            if (this._loggedInUser.role == "MANAGER") {
-                this._isManager = true;
-            }
-          }) 
-         }
+        this._loggedInUser = JSON.parse(sessionStorage.getItem('userObj')!); 
+        if(this._loggedInUser == null){
+          this.router.navigateByUrl('')
+        }
+    
+        if (this._loggedInUser.role == "MANAGER"){
+          this._isManager = true;
+        }    
+    }
 
     viewReimbursement(reimbursement: any){
         this._isAddingReimbursement = false;
@@ -119,12 +121,16 @@ export class ViewModalComponent {
         } else {
             this.getResolverName(this._reimbursementInput.resolver)
         }
+        this._status = this._reimbursementInput.status;
         console.log("STATUS")
-        console.log(this._reimbursement.status)
-        if (this._reimbursement.status != "PENDING"){
-            this._isProcessed = true;
+        console.log(this._status)
+
+        if (this._reimbursementInput.status != "PENDING"){
+            this._isProcessed = true;            
         }
         this.modalService.open(reimbursement);
+        console.log("REIMBURSEMENT")
+        console.log(this._reimbursement)
     }
 
     addNewReimbursement(reimbursement: any){

@@ -99,7 +99,19 @@ _specifiedUser:  User = {
 }
 
 date: Date = new Date(); 
-_dateResolved: any = this.date.getMonth() + "-" + this.date.getDate() + "-" + this.date.getFullYear();
+_dateSubmitted: any = ((this.date.getMonth() + 1) < 10 ? '0'+ (this.date.getMonth() + 1) : this.date.getMonth()) +
+"-" + ((this.date.getDate() + 1) < 10 ? '0'+ (this.date.getDate() + 1) : this.date.getDate()) +
+"-" + this.date.getFullYear() +
+" " + (parseInt(this.date.getHours().toString().substring(0,2)) < 10 ? '0'+ this.date.getHours().toString().substring(0,2) : this.date.getHours().toString().substring(0,2)) + 
+":" + (parseInt(this.date.getMinutes().toString().substring(0,2)) < 10 ? '0'+ this.date.getMinutes().toString().substring(0,2) : this.date.getMinutes().toString().substring(0,2)) + 
+":" + (parseInt(this.date.getSeconds().toString().substring(0,2)) < 10 ? '0'+ this.date.getSeconds().toString().substring(0,2) : this.date.getSeconds().toString().substring(0,2));
+_dateResolved: any = ((this.date.getMonth() + 1) < 10 ? '0'+ (this.date.getMonth() + 1) : this.date.getMonth()) +
+"-" + ((this.date.getDate() + 1) < 10 ? '0'+ (this.date.getDate() + 1) : this.date.getDate()) +
+"-" + this.date.getFullYear() +
+" " + (parseInt(this.date.getHours().toString().substring(0,2)) < 10 ? '0'+ this.date.getHours().toString().substring(0,2) : this.date.getHours().toString().substring(0,2)) + 
+":" + (parseInt(this.date.getMinutes().toString().substring(0,2)) < 10 ? '0'+ this.date.getMinutes().toString().substring(0,2) : this.date.getMinutes().toString().substring(0,2)) + 
+":" + (parseInt(this.date.getSeconds().toString().substring(0,2)) < 10 ? '0'+ this.date.getSeconds().toString().substring(0,2) : this.date.getSeconds().toString().substring(0,2));
+
 
   constructor(private reimbursementService: ReimbursementService,
               private modalService: NgbModal,
@@ -110,20 +122,11 @@ _dateResolved: any = this.date.getMonth() + "-" + this.date.getDate() + "-" + th
   }
   
   ngOnInit(): void {
-    this.userService.checkSession().subscribe(user => {
-      if (user.success) {
-          this._user = {
-            userId: user.object.userId,
-            userName: user.object.userName,
-            password: user.object.password,
-            firstName: user.object.firstName,
-            lastName: user.object.lastName,
-            email: user.object.email,
-            role: user.object.role,
-            picUrl: user.object.picUrl
-          }        
-        }
-    }) 
+    this._user = JSON.parse(sessionStorage.getItem('userObj')!);
+
+    if(this._user == null){
+      this.router.navigateByUrl('')
+    }
   }
 
 
@@ -199,6 +202,7 @@ _dateResolved: any = this.date.getMonth() + "-" + this.date.getDate() + "-" + th
         this._reimbursement.type = this._type;
         this._reimbursement.description = this._description;
         this._reimbursement.amount = this._amount;
+        console.log("EDIT REIMB")
         console.log(this._reimbursement);
         this.reimbursementService.editReimbursement(this._reimbursement).subscribe(data => {
           if (data.success){
@@ -260,8 +264,8 @@ _dateResolved: any = this.date.getMonth() + "-" + this.date.getDate() + "-" + th
         console.log(this._specifiedUser);
         this.userService.editProfile(this._specifiedUser).subscribe( data => {
           if (data.success){
-            console.log("OBJECT");
-            console.log(data.object)
+            console.log("MESSAGE");
+            console.log(data.message)
             this.modalService.dismissAll();
             alert(data.message);
           }
