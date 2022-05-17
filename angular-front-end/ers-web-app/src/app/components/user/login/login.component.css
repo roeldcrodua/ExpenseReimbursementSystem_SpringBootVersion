@@ -44,7 +44,7 @@ h2, h3, h4{
 }
 
 /* Set a style for the submit/login button */
- #login-btn{
+ #login-btn, #reset-btn{
   color: white;
   cursor: pointer;
   opacity: 0.8;

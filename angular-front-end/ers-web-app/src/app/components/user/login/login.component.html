@@ -20,7 +20,7 @@
       <input type="text" placeholder="Enter Username or Email" id="userName" name="_userName" [(ngModel)] = "_userName" (focus)="removeuserName()" (blur)="checkuserName()" autocomplete="userName" required>
       <div id="validate-userName" class="fst-italic fw-bolder text-danger">{{_invaliduserNameMessage}}</div>
       <div class="col">
-        <button type="submit" id="login-btn" class="btn btn-primary" (click)="resetPassword()">Reset Password</button>
+        <button type="submit" id="reset-btn" class="btn btn-primary" (click)="resetPassword()">Reset Password</button>
      </div>
    <a id="reset" class="text-decoration-none fw-bold" (click)="backToLogin()">Back to Login?</a>
   </form>

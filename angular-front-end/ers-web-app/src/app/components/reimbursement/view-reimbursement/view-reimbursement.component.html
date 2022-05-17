@@ -1,11 +1,14 @@
-<div *ngIf="_isNewReimbursement" class="ms-3 mt-2 mb-2 justify-content-center col">
+<div *ngIf="_isNewReimbursement && !_isManager" class="ms-3 mt-2 mb-2 justify-content-center col">
     <button type="button" class="btn btn-success tooltip-top fw-bold pt-0 pb-0" title="File New Reimbursement" id="add-btn" (click)="addNewReimbursement(reimbursement)">File New<br/>Reimbursement</button>
 </div>
+<!-- <div *ngIf="_isManager" class="ms-3 mt-2 mb-2 justify-content-center col">
+    <button type="button" class="btn btn-success tooltip-top fw-bold pt-0 pb-0" title="File New Reimbursement" id="add-btn">File New<br/>Reimbursement1</button>
+</div> -->
 <div *ngIf="!_isNewReimbursement">
     <button *ngIf="!_isManager && _reimbursementInput.status == 'PENDING'" class="btn btn-primary fw-bolder" id="view-btn-open" (click)="viewReimbursement(reimbursement)">Open</button>
     <button *ngIf="_isManager && _reimbursementInput.status == 'PENDING'"class="btn btn-warning fw-bolder" id="view-btn-resolve" (click)="viewReimbursement(reimbursement)">Resolve</button>
-    <button *ngIf="_reimbursementInput.status == 'APPROVED' " class="btn btn-success fw-bolder" id="view-btn-approved" (click)="viewReimbursement(reimbursement)">Approved</button>
-    <button *ngIf="_reimbursementInput.status == 'DENIED'" class="btn btn-danger fw-bolder" id="view-btn-denied" (click)="viewReimbursement(reimbursement)">Denied</button>
+    <button *ngIf="_reimbursementInput.status == 'APPROVED' " class="btn btn-success fw-bolder" id="view-btn-approved" (click)="viewReimbursement(reimbursement)">View</button>
+    <button *ngIf="_reimbursementInput.status == 'DENIED'" class="btn btn-danger fw-bolder" id="view-btn-denied" (click)="viewReimbursement(reimbursement)">View</button>
 </div>
 
 <ng-template #reimbursement let-modal>
@@ -58,10 +61,10 @@
             </div>
             <div *ngIf="_isManager">
                 <label for="recipient-name" class="col-form-label fw-bolder">Status</label>
-                <select id="_type" name="_type" class="bg-light text-black mt-2 text-uppercase fw-bold form-control text-center" required [(ngModel)]="_status">
-                    <option value="0" selected>PENDING</option>
-                    <option value="1">APPROVED</option>
-                    <option value="2">DENIED</option>
+                <select id="_status" name="_status" class="bg-light text-black mt-2 text-uppercase fw-bold form-control text-center" required [(ngModel)]="_status">
+                    <option value="PENDING">PENDING</option>
+                    <option value="APPROVED">APPROVED</option>
+                    <option value="DENIED">DENIED</option>
                 </select>               
             </div>
             <div class="mb-2">
