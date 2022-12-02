@@ -118,3 +118,58 @@ requests and past history for all employees in the company. Finance managers are
 ### Search existing user employee
 ![image](https://user-images.githubusercontent.com/65931708/161143010-a96046df-c15c-4956-a9fc-513f877f3b38.png)
 
+
+## How to clone and get it to work in local machine.
+
+* Clone the project from github.
+
+  - git clone https://github.com/roeldcrodua/ExpenseReimbursementSystem_SpringBootVersion.git
+
+* Open the server application using anycode editor ( ex. Intellij, Eclipse). Run the application as well via the Main method 
+  - (SpringApplication.run(ErsApplication.class, args)).
+
+* Make sure there is no error encountered in the console log.
+
+* On the other hand, open the front-end server application using Visual Studio Code.
+
+* Install @angular/cli or update if you have installed it already.
+
+  - ng install @angular/cli @angular/core
+  - ng update @angular/cli @angular/core
+
+* Install npm into the application. 
+
+  - npm install
+
+* Once installed, run ng build to build and compile the front end application
+
+* If error occured due to jwt_decode issue, execute the following.
+
+  - npm install --save jwt-decode
+  - npm install --save @types/jwt-decode
+
+* Run again ng build.
+
+* If no errors, run the ng serve command to open a browser for the front-end application.
+
+* Once the application is compiled, open the browser thru the localhost address.
+
+  - http://localhost:4200/ 
+
+* Since this is the first time running the application so there is no user existed. Open a Postman to easily manually add a manager user account. The manager can only add employee user account.
+
+  - example:
+  http://localhost:9000/ers/api/user
+  POST method
+  raw values: JSON
+  {
+      "userName" : "manager",
+      "password" : "manager",
+      "firstName" : "Manager",
+      "lastName": "ERS-Manager",
+      "email": "your_email@mail.com",
+      "role": "MANAGER", 
+      "picUrl": ""
+  }
+
+* Once the manager account got created, then try registering an employee user then change the password into a new password. Resetting password can be done and found the new password via the log console of the backend-server from Intellij.
