@@ -1,0 +1,19 @@
+[Unit]
+Description=ERS Spring Boot Service
+After=network.target
+
+[Service]
+# Run as non-root user (create user ers beforehand)
+User=ers
+Group=ers
+WorkingDirectory=/opt/ers/app
+EnvironmentFile=/etc/ers/ers.env
+# Give the JVM some sane defaults for servers
+Environment="JAVA_OPTS=-Xms256m -Xmx1024m -XX:+UseG1GC -Duser.timezone=UTC"
+ExecStart=/usr/bin/java $JAVA_OPTS -jar /opt/ers/app/ers_springboot.jar --spring.profiles.active=prod --server.port=${SERVER_PORT}
+SuccessExitStatus=143
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

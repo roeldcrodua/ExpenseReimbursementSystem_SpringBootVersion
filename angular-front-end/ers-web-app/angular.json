@@ -36,6 +36,8 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/ExpenseReimbursementSystem_SpringBootVersion/",
+              "deployUrl": "/ExpenseReimbursementSystem_SpringBootVersion/",
               "budgets": [
                 {
                   "type": "initial",

@@ -4,7 +4,7 @@ import { GenericService } from './generic.service';
 import { Observable } from 'rxjs';
 import { User } from '../model/user';
 import { Router } from '@angular/router';
-import jwt_decode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +27,7 @@ export class UserService {
 
   getDecodedAccessToken(token: string): void {
     try {
-      let user = jwt_decode(token);
+      const user = jwtDecode<any>(token);
       sessionStorage.setItem('userObj', JSON.stringify(user));
       sessionStorage.setItem('JWT', token);
     } catch(Error) {

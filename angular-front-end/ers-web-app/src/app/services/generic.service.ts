@@ -1,12 +1,16 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GenericService {
+  // Single source of truth for API base URL
+  public apiBase: string = environment.apiBase;
 
-  public _localClientDomain: string = 'http://localhost:4200/ers/api';
-  public _localServerDomain: string = 'http://localhost:9000/ers/api';
+  // Backwards compatibility: preserve existing fields used by other services
+  public _localServerDomain: string = this.apiBase;
+  public _localClientDomain: string = this.apiBase; // not used for calls, kept for compatibility
 
   constructor() { }
 }

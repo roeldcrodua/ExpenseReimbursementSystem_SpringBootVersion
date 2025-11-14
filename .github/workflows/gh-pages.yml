@@ -1,0 +1,39 @@
+name: Deploy Angular to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'angular-front-end/ers-web-app/**'
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: angular-front-end/ers-web-app
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 16.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 16
+
+      - name: Install dependencies (legacy peer deps)
+        run: npm install --legacy-peer-deps
+
+      - name: Build (production)
+        run: npx ng build --configuration production
+
+      - name: SPA fallback (copy index.html to 404.html)
+        run: cp dist/ers-web-app/index.html dist/ers-web-app/404.html
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./angular-front-end/ers-web-app/dist/ers-web-app
+          enable_jekyll: false
